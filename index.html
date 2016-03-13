@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Neurolab</title>
+    <link rel="stylesheet" type="text/css" href="css/neurolab.css"/>
+    <script>window.$ = window.jQuery = require('./js/vendor/jquery/jquery.js');</script>
+    <script type="text/javascript" src="js/vendor/underscore/underscore.js"></script>
+    <script type="text/javascript" src="js/vendor/sprintf/sprintf.js"></script>
+    <script type="text/javascript" src="js/vendor/backbone/backbone.js"></script>
+    <script type="text/javascript" src="js/neurolab/models/neuron.js"></script>
+    <script type="text/javascript" src="js/neurolab/models/neuron-map.js"></script>
+    <script type="text/javascript" src="js/canvasgrid/canvasgrid.js"></script>
+    <script type="text/javascript" src="js/neurolab/views/neuron-canvas.js"></script>
+    <script type="text/javascript" src="js/neurolab/index.js"></script>
+  </head>
+  <body>
+    <div>
+      <div id="neuron_container">    
+        <canvas id="neuron_canvas" class="canvas-grid"></canvas>    
+      </div>
+    </div>
+  </body>
+</html>

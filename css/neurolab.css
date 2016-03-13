@@ -1,0 +1,6 @@
+.canvas-grid {
+	border: 1px inset silver;
+	margin: 0;
+	padding: 0;
+	cursor: pointer;
+}
