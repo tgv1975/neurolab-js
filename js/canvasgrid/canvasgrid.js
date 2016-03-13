@@ -17,6 +17,7 @@ var CanvasGrid = Backbone.View.extend({
 	initialize: function() {
 
 		this.uid = 'canvasgrid_' + $('.canvas-grid').length
+
 		this.context = this.el.getContext("2d");
 
 		this.cursorCanvas = this.createOverlayCanvas( this.uid + '_cursor');
@@ -25,7 +26,6 @@ var CanvasGrid = Backbone.View.extend({
 		this.render();
 
 	},
-
 
 	createOverlayCanvas: function( id ){
 
@@ -92,10 +92,10 @@ var CanvasGrid = Backbone.View.extend({
 	eraseCursor: function(x, y) {
 		this.cursorContext.beginPath();
 
-		var top = this.repairCoord(x - this.zoom);
-		var left = this.repairCoord(y - this.zoom);
-		var width = this.repairCoord(x + this.zoom + 1, this.el.width);
-		var height = this.repairCoord(y + this.zoom + 1, this.el.height);
+		var top = this.constrainCoord(x - this.zoom);
+		var left = this.constrainCoord(y - this.zoom);
+		var width = this.constrainCoord(x + this.zoom + 1, this.el.width);
+		var height = this.constrainCoord(y + this.zoom + 1, this.el.height);
 
 		this.cursorContext.clearRect(top, left, width, height);
 		this.cursorContext.closePath();
@@ -133,7 +133,7 @@ var CanvasGrid = Backbone.View.extend({
     },
 
 
-    repairCoord: function(value, compare){
+    constrainCoord: function(value, compare){
     	if(value < 0) {
     		return 0;
     	}
@@ -186,3 +186,9 @@ var CanvasGrid = Backbone.View.extend({
 	}
 
 });
+
+CanvasGrid.extend = function(child) {
+	var view = Backbone.View.extend.apply(this, arguments);
+	view.prototype.events = _.extend({}, this.prototype.events, child.events);
+	return view;
+};

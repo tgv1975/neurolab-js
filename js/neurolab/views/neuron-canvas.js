@@ -4,6 +4,10 @@ var NeuronCanvas = CanvasGrid.extend({
 
 	zoom: 20,
 
+	events: {
+		'click': 'clickHandler'
+	},
+
 	initialize: function(args) {
 
 		if(!(this.model instanceof NeuronMap) ) {
@@ -19,8 +23,12 @@ var NeuronCanvas = CanvasGrid.extend({
 		CanvasGrid.prototype.initialize.apply(this, args);
 	},
 
-	// clickActiond: function(event) {
 
-	// }
+	clickHandler: function(event) {
+		
+		CanvasGrid.prototype.clickHandler.apply(this, [event]);
+
+	}
+
 
 });
