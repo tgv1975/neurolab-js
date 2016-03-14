@@ -8,6 +8,8 @@ var NeuronStats = Backbone.View.extend({
 	initialize: function() {
 
 		this.listenTo(this.model, "change", this.render);
+		this.listenTo(this.model, "afterStimulation", this.render);
+
 		this.render();
 	},
 

@@ -14,11 +14,11 @@ var NeuronCanvas = CanvasGrid.extend({
 
 	initialize: function() {
 
-		if(!(this.model instanceof NeuronMap) ) {
+		if(!(this.model instanceof Neuron) ) {
 
 			throw { 
 			    name: "NeuronCanvas Error", 
-			    message: "NeuronMap initialized without a valid NeuronMap object.", 
+			    message: "NeuronMap initialized without a valid Neuron object.", 
 			    toString: function(){return this.name + ": " + this.message;} 
 			};
 
@@ -30,8 +30,11 @@ var NeuronCanvas = CanvasGrid.extend({
 
 	clickHandler: function(event) {
 		
-		CanvasGrid.prototype.clickHandler.apply(this, [event]);
+		var coords= this.getMousePosToTileIndex(event);
+		
+		this.model.stimulate(coords);
 
+		CanvasGrid.prototype.clickHandler.apply(this, [event]);
 	}
 
 

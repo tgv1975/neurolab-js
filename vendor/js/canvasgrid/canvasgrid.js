@@ -57,7 +57,7 @@ var CanvasGrid = Backbone.View.extend({
 
 
 	createSpriteCanvas: function(id, width, height ) {
-		
+
 		var canvas = document.createElement('canvas');
 		canvas.id = id ; 
 		canvas.style.position = 'absolute';
@@ -151,10 +151,27 @@ var CanvasGrid = Backbone.View.extend({
     	}
     },
 
-    
+
+	getMousePosToTileIndex: function(event) {
+		var coords = this.getMousePosToGrid(event);
+
+		return {
+			x: this.gridCoordToTileIndex(coords.x),
+			y: this.gridCoordToTileIndex(coords.y)
+		}
+	},   
+
+
     coordinateToGrid: function(value) {
 
     	return Math.trunc(value / this.zoom) * this.zoom;
+
+    },
+
+    
+    gridCoordToTileIndex: function(value) {
+
+    	return Math.trunc(value / this.zoom)
 
     },
 
