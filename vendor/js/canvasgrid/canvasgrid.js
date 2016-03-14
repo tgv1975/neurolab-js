@@ -104,7 +104,7 @@ var CanvasGrid = Backbone.View.extend({
 	},
 
 
-	plot: function(x, y, color) {
+	plot: function(x, y, color) {		
 		this.context.beginPath();
 		this.context.fillStyle = color;
 		this.context.fillRect(x, y, this.zoom, this.zoom);

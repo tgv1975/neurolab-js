@@ -54,8 +54,9 @@ class Neuron {
     propagate() {
         // TODO: this is a mere sketch; tear down, refactor.
         for(var i=0; i < this.size; i++) {
-            this.active_units.push({x: this.active_units[i].x + 1, y: this.active_units[i].y + 1});
-            this.trigger('afterStimulation', sprintf('Neuron stimulated @ %(coords)s', {coords: this.active_units[i]}));
+            var coords = {x: this.active_units[i].x + 1, y: this.active_units[i].y + 1};
+            this.active_units.push(coords);
+            this.trigger('afterStimulation', sprintf('Neuron stimulated @ %(coords)s', {coords: coords}), {coords: coords});
         }
 
     }

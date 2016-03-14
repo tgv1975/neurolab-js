@@ -24,6 +24,8 @@ var NeuronCanvas = CanvasGrid.extend({
 
 		}
 
+		this.listenTo(this.model, "afterStimulation", this.plot);
+		
 		CanvasGrid.prototype.initialize.apply(this, [this.model.size, this.model.size]);
 	},
 
