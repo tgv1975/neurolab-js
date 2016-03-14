@@ -56,7 +56,7 @@ class Neuron {
         for(var i=0; i < this.size; i++) {
             var coords = {x: this.active_units[i].x + 1, y: this.active_units[i].y + 1};
             this.active_units.push(coords);
-            this.trigger('afterStimulation', sprintf('Neuron stimulated @ %(coords)s', {coords: coords}), {coords: coords});
+            this.trigger('afterStimulation', coords.x, coords.y, 'red' );
         }
 
     }

@@ -24,11 +24,18 @@ var NeuronCanvas = CanvasGrid.extend({
 
 		}
 
-		this.listenTo(this.model, "afterStimulation", this.plot);
-		
+		this.listenTo(this.model, "afterStimulation", this.plotByTile);
+
 		CanvasGrid.prototype.initialize.apply(this, [this.model.size, this.model.size]);
 	},
 
+
+	plotByTile: function(x, y, color) {
+		x = x * this.zoom;
+		y =y * this.zoom;
+
+		this.plot(x, y, color);
+	},
 
 	clickHandler: function(event) {
 		
