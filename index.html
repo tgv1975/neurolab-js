@@ -1,24 +1,31 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="UTF-8">
     <title>Neurolab</title>
     <link rel="stylesheet" type="text/css" href="css/neurolab.css"/>
-    <script>window.$ = window.jQuery = require('./js/vendor/jquery/jquery.js');</script>
-    <script type="text/javascript" src="js/vendor/underscore/underscore.js"></script>
-    <script type="text/javascript" src="js/vendor/sprintf/sprintf.js"></script>
-    <script type="text/javascript" src="js/vendor/backbone/backbone.js"></script>
+    <link rel="stylesheet" type="text/css" href="vendor/framework/bootstrap/css/bootstrap.min.css"/>
+    <script>window.$ = window.jQuery = require('./vendor/js/jquery/jquery.js');</script>
+    <script type="text/javascript" src="vendor/js/underscore/underscore.js"></script>
+    <script type="text/javascript" src="vendor/js/underscore/underscore.string.js"></script>
+    <script type="text/javascript" src="vendor/js/sprintf/sprintf.js"></script>
+    <script type="text/javascript" src="vendor/js/backbone/backbone.js"></script>
+    <script type="text/javascript" src="vendor/js/canvasgrid/canvasgrid.js"></script>
     <script type="text/javascript" src="js/neurolab/models/neuron.js"></script>
     <script type="text/javascript" src="js/neurolab/models/neuron-map.js"></script>
-    <script type="text/javascript" src="js/canvasgrid/canvasgrid.js"></script>
+    <script type="text/javascript" src="js/neurolab/views/neuron-stats.js"></script>
     <script type="text/javascript" src="js/neurolab/views/neuron-canvas.js"></script>
     <script type="text/javascript" src="js/neurolab/index.js"></script>
-  </head>
-  <body>
-    <div>
-      <div id="neuron_container">    
-        <canvas id="neuron_canvas" class="canvas-grid"></canvas>    
-      </div>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div id="neuron_container" class="col-sm-6 col-md-6 col-lg-6">
+                <canvas id="neuron_canvas" class="canvas-grid"></canvas>    
+            </div>
+            <div id="neuron_stats" class="col-sm-6 col-md-6 col-lg-6">
+            </div>
+        </div>
     </div>
-  </body>
+</body>
 </html>

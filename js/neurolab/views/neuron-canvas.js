@@ -1,3 +1,7 @@
+/**
+* Implements a graphical neuron view, by extending CanvasGrid.
+*/
+
 var NeuronCanvas = CanvasGrid.extend({
 
 	el: '#neuron_canvas',
@@ -8,7 +12,7 @@ var NeuronCanvas = CanvasGrid.extend({
 		'click': 'clickHandler'
 	},
 
-	initialize: function(args) {
+	initialize: function() {
 
 		if(!(this.model instanceof NeuronMap) ) {
 
@@ -20,7 +24,7 @@ var NeuronCanvas = CanvasGrid.extend({
 
 		}
 
-		CanvasGrid.prototype.initialize.apply(this, args);
+		CanvasGrid.prototype.initialize.apply(this, [this.model.size, this.model.size]);
 	},
 
 

@@ -8,10 +8,12 @@ neuron.on('afterReset', function(args) {
 
 var neuronMap = new NeuronMap(neuron);
 var neuronCanvas;
+var neuronStats;
 
 $(document).ready( function() {
 	
 	neuronCanvas = new NeuronCanvas({model: neuronMap});
+	neuronStats = new NeuronStats({model: neuron});
 
 	// plotRandom();
 	// function plotRandom() {

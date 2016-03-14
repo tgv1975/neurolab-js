@@ -1,5 +1,11 @@
-.canvas-grid {
+#neuron_container {
 	border: 1px inset silver;
+	max-height: 50vh;
+	overflow: auto;
+	padding: 0;
+}
+
+.canvas-grid {
 	margin: 0;
 	padding: 0;
 	cursor: pointer;

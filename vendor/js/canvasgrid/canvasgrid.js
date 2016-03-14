@@ -1,5 +1,14 @@
+/**
+* Implements the logic for a grid/tiled display space on a HTML canvas.
+*/
+
+/**
+* @abstract
+*/
 var CanvasGrid = Backbone.View.extend({
 	
+	el: '', // Child class must provide a valid DOM element selector.
+
 	zoom: 1,
 
 	colors: {
@@ -14,32 +23,55 @@ var CanvasGrid = Backbone.View.extend({
 	},
 
 
-	initialize: function() {
+	initialize: function( width, height ) {
 
-		this.uid = 'canvasgrid_' + $('.canvas-grid').length
+		if(this.constructor === CanvasGrid) {
+			throw { 
+			    name: "CanvasGrid Error", 
+			    message: "Cannot instantiate CanvasGrid directly! You must extend it, and provide the required properties.",
+			    toString: function(){return this.name + ": " + this.message;} 
+			};
+    	}
 
-		this.context = this.el.getContext("2d");
+    	if(this.el.tagName !== 'CANVAS') {
+			throw { 
+			    name: "CanvasGrid Error", 
+			    message: "The DOM element provided to the CanvasGrid view is not a valid <canvas> element. Nothing to draw on.",
+			    toString: function(){return this.name + ": " + this.message;} 
+			};
+    	}
 
-		this.cursorCanvas = this.createOverlayCanvas( this.uid + '_cursor');
+    	this.width = width;
+    	this.height = height;
+
+		this.context = this.el.getContext('2d');
+
+		this.cursorCanvas = this.createSpriteCanvas(this.width, this.height);
 		this.cursorContext = this.cursorCanvas.getContext('2d');
 
 		this.render();
 
+		this.drawCursor(this.colors.cursor);
+
 	},
 
-	createOverlayCanvas: function( id ){
 
+	createSpriteCanvas: function(id, width, height ) {
+		
 		var canvas = document.createElement('canvas');
 		canvas.id = id ; 
 		canvas.style.position = 'absolute';
-		canvas.className='canvas-grid';
 
 		var origin = this.$el.offset();
 
 		$(canvas).offset(origin);
-		canvas.style.pointerEvents='none';
+
+		canvas.width = width;
+		canvas.height = height;
+
+		canvas.style.pointerEvents = 'none';
 		
-		document.body.appendChild(canvas);
+		this.$el.parent()[0].appendChild(canvas);
 
 		return canvas;
 	},
@@ -47,7 +79,7 @@ var CanvasGrid = Backbone.View.extend({
 
 	render: function() {
 
-		this.resetSize(this.model.size);
+		this.reset();
 		this.drawBackground();
 
 		return this;
@@ -55,12 +87,12 @@ var CanvasGrid = Backbone.View.extend({
 	},
 
 
-	resetSize: function(size) {
-		this.el.width = this.model.size * this.zoom;
-		this.el.height = this.model.size * this.zoom;
+	reset: function() {
+		this.el.width = this.width * this.zoom;
+		this.el.height = this.height * this.zoom;
 
-		this.cursorCanvas.width = this.el.width;
-		this.cursorCanvas.height = this.el.height;
+		this.cursorCanvas.width = this.zoom;
+		this.cursorCanvas.height = this.zoom;
 	},
 
 
@@ -80,25 +112,19 @@ var CanvasGrid = Backbone.View.extend({
 	},
 
 
-	drawCursor: function(x, y, color) {
+	drawCursor: function(color) {
 		this.cursorContext.beginPath();
 		this.cursorContext.lineWidth = 2;
 		this.cursorContext.strokeStyle = color;
-		this.cursorContext.strokeRect(x, y, this.zoom, this.zoom);
+		this.cursorContext.strokeRect(0, 0, this.cursorCanvas.width, this.cursorCanvas.height);
 		this.cursorContext.closePath();
 	},
 
 	
-	eraseCursor: function(x, y) {
-		this.cursorContext.beginPath();
-
-		var top = this.constrainCoord(x - this.zoom);
-		var left = this.constrainCoord(y - this.zoom);
-		var width = this.constrainCoord(x + this.zoom + 1, this.el.width);
-		var height = this.constrainCoord(y + this.zoom + 1, this.el.height);
-
-		this.cursorContext.clearRect(top, left, width, height);
-		this.cursorContext.closePath();
+	moveCursor: function(x, y) {
+		var origin = this.$el.offset();
+		
+		$(this.cursorCanvas).offset( {top: y + origin.top, left: x + origin.left} );
 	},
 
 
@@ -164,10 +190,9 @@ var CanvasGrid = Backbone.View.extend({
 				return;
 			}
 
-			this.eraseCursor( this.lastCursor.x, this.lastCursor.y);
 		}
 
-		this.drawCursor(coords.x, coords.y, this.colors.cursor);
+		this.moveCursor(coords.x, coords.y);
 
 		this.lastCursor = { x: coords.x, y: coords.y };
 
@@ -177,11 +202,6 @@ var CanvasGrid = Backbone.View.extend({
 
 
 	mouseOutHandler: function(event){
-		if( typeof this.lastCursor !== 'undefined') {
-
-			this.eraseCursor( this.lastCursor.x, this.lastCursor.y);
-		}
-
 		return event;
 	}
 
