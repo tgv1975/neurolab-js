@@ -1,6 +1,6 @@
 "use strict";
 
-var neuron = new Neuron(100);
+var neuron = new Neuron(50);
 
 neuron.on('afterReset', function(args) {
 	console.log(args);
@@ -14,7 +14,7 @@ $(document).ready( function() {
 	neuronCanvas = new NeuronCanvas({model: neuron});
 	neuronStats = new NeuronStats({model: neuron});
 
-	console.time( 'perf' )
+	// console.time( 'perf' )
 
 	function plotRandom() {
 
@@ -32,6 +32,6 @@ $(document).ready( function() {
 	// 	stimRandom();
 	// }
 
-	console.timeEnd('perf')
+	// console.timeEnd('perf')
 	});
 

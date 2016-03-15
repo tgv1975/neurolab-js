@@ -2,6 +2,8 @@
 * Implements the logic for a grid/tiled display space on a HTML canvas.
 */
 
+"use strict;"
+
 /**
 * @abstract
 */
@@ -105,14 +107,20 @@ var CanvasGrid = Backbone.View.extend({
 
 
 	plot: function(x, y, color) {
-		console.log(x + ', ' + y)
+		// console.log('Plotting at: ' + x + ', ' + y)
 		this.context.beginPath();
 		this.context.fillStyle = color;
 		this.context.fillRect(x, y, this.zoom, this.zoom);
 		this.context.closePath();
 	},
 
+	plotByTile: function(x, y, color) {
+		x = x * this.zoom;
+		y =y * this.zoom;
 
+		this.plot(x, y, color);
+	},
+	
 	drawCursor: function(color) {
 		this.cursorContext.beginPath();
 		this.cursorContext.lineWidth = 2;

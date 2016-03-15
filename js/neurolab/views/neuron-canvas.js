@@ -2,14 +2,17 @@
 * Implements a graphical neuron view, by extending CanvasGrid.
 */
 
+"use strict;"
+
 var NeuronCanvas = CanvasGrid.extend({
 
 	el: '#neuron_canvas',
 
-	zoom: 20,
+	zoom: 5,
 
 	events: {
-		'click': 'clickHandler'
+		'click': 'clickHandler',
+		'mousemove': 'mouseMoveHandler'
 	},
 
 	initialize: function() {
@@ -24,18 +27,12 @@ var NeuronCanvas = CanvasGrid.extend({
 
 		}
 
-		this.listenTo(this.model, "afterStimulation", this.plotByTile);
+		this.listenTo(this.model, "afterSelfStimulation", this.plotByTile);
+		this.listenTo(this.model, "afterReleaseUnit", this.plotByTile);
 
 		CanvasGrid.prototype.initialize.apply(this, [this.model.size, this.model.size]);
 	},
 
-
-	plotByTile: function(x, y, color) {
-		x = x * this.zoom;
-		y =y * this.zoom;
-
-		this.plot(x, y, color);
-	},
 
 	clickHandler: function(event) {
 		
@@ -44,7 +41,14 @@ var NeuronCanvas = CanvasGrid.extend({
 		this.model.stimulate(coords);
 
 		CanvasGrid.prototype.clickHandler.apply(this, [event]);
-	}
+	},
 
+
+	mouseMoveHandler: function(event) {
+
+		var coords = this.getMousePosToTileIndex(event);
+		CanvasGrid.prototype.mouseMoveHandler.apply(this, [event]);	
+
+	}
 
 });
