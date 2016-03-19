@@ -1,5 +1,11 @@
 /**
+* CanvasGrid
+*
 * Implements the logic for a grid/tiled display space on a HTML canvas.
+*
+* Copyright (C) 2016 Tudor Gavan.
+
+* MIT License
 */
 
 "use strict;"

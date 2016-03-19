@@ -27,10 +27,23 @@ var NeuronCanvas = CanvasGrid.extend({
 
 		}
 
-		this.listenTo(this.model, "afterStimulation", this.plotByTile);
-		this.listenTo(this.model, "afterReleaseUnit", this.plotByTile);
+		this.listenTo(this.model, "afterUnitSet", this.fillUnit);
+		this.listenTo(this.model, "afterUnitRelease", this.fillUnit);
 
 		CanvasGrid.prototype.initialize.apply(this, [this.model.size, this.model.size]);
+	},
+
+
+	fillUnit: function(x, y, unit) {
+		switch(unit.status){
+			case 0:
+				this.plotByTile(x, y, 'lime');
+			break;
+
+			case 1:
+				this.plotByTile(x, y, 'red');
+			break;
+		}		
 	},
 
 
@@ -38,7 +51,7 @@ var NeuronCanvas = CanvasGrid.extend({
 		
 		var coords= this.getMousePosToTileIndex(event);
 		
-		this.model.stimulate(coords);
+		this.model.set(coords);
 
 		// DO NOT call parent method here, the drawing will be handled in the
 		// callback triggered by Neuron.stimulate().
@@ -49,7 +62,7 @@ var NeuronCanvas = CanvasGrid.extend({
 	mouseMoveHandler: function(event) {
 
 		var coords = this.getMousePosToTileIndex(event);
-		// console.log(this.model.soma[coords.x][coords.y]);
+		// console.log(this.model.matrix[coords.x][coords.y]);
 		CanvasGrid.prototype.mouseMoveHandler.apply(this, [event]);	
 
 	}

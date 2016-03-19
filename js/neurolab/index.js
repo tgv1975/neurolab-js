@@ -7,12 +7,12 @@ neuron.on('afterReset', function(args) {
 });
 
 var neuronCanvas;
-var neuronStats;
+var neuronParamsView;
 
 $(document).ready( function() {
 	
 	neuronCanvas = new NeuronCanvas({model: neuron});
-	neuronStats = new NeuronStats({model: neuron});
+	neuronParamsView = new NeuronParamsView({model: neuron});
 
 	// console.time( 'perf' )
 
