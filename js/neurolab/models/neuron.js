@@ -16,14 +16,22 @@ class Depolarizer {
 
 }
 
+class SomaUnit {
+
+
+        constructor(status) {
+            this.status = status;
+        }
+
+}
+
+
 class Neuron {
 
 
     constructor(size) {       
 
     	this.attachEvents();
-
-        this.active_units = []
 
         this.depolarizer = new Depolarizer();
 
@@ -42,58 +50,64 @@ class Neuron {
             this.soma[i] = [];
         }
 
+        this.active_units = [];
+
         this.trigger('afterReset', sprintf( 'Neuron reset. Size is now %(size)u.', {size: this.size}));
     }
 
 
-    stimulate(coords) {
-
-        this.active_units.push(coords)
-        
-        this.trigger('afterStimulation', sprintf('Neuron stimulated @ %(coords)s', {coords: coords}));
-
-        this.process();
-    }
-
-
     canStimulate(coords) {
-        return this.soma[coords.x][coords.y] !== 1;
+        if(typeof this.soma[coords.x][coords.y] === 'undefined') {
+            return true;
+        }
+        return this.soma[coords.x][coords.y]['status'] === 0;
     }
 
 
-    autoStimulate(coords) {
+    stimulate(coords) {
 
         if(! this.canStimulate(coords) ) {
             return;
         }
 
         this.active_units.push(coords);
-        this.soma[coords.x][coords.y] = 1;
-        this.trigger('afterSelfStimulation', coords.x, coords.y, 'red');
+        this.soma[coords.x][coords.y] = new SomaUnit(1);
+
+        this.trigger('afterStimulation', coords.x, coords.y, 'red');
+
+        this.process();
     }
 
 
     releaseActiveUnit(index) {
-        this.soma[this.active_units[index].x][this.active_units[index].y] = 0;
+        var coords = {x: this.active_units[index].x, y: this.active_units[index].y}
+
+        this.soma[coords.x][coords.y]['status'] = 0;
         this.active_units.splice(index, 1);
-        this.trigger('afterReleaseUnit', this.active_units[index].x, this.active_units[index].y, 'lime');
+
+        this.trigger('afterReleaseUnit', coords.x, coords.y, 'lime');
     }
 
 
     process() {
+
+        if( this.processing ) {
+            return;
+        }
+
+        this.processing = true;
 
         this.pattern = this.generatePropagationPatternArray('o', 'cw');
 
         this.active_unit_index = 0; 
         this.cycles = 0;
 
-        this.stepPropagate();
+        this.step();
 
     }
 
 
-    stepPropagate() {
-
+    step() {
 
         this.propagate(this.active_unit_index, this.pattern);
 
@@ -103,25 +117,28 @@ class Neuron {
             this.active_unit_index = 0;
         }
 
-        if( this.active_units.length ) {
-            setTimeout(this.stepPropagate(), 100);
+        if(this.active_units.length) {
+            setTimeout( this.step.bind(this) , 0);
+        } else {
+            this.processing = false;
         }
 
     }
 
 
     propagate(index, pattern) {
-        var neighbours = this.getNeighboursByPattern( this.active_units[index], pattern );
-
-        for(var i=0; i < neighbours.length ; i++) {
-            this.autoStimulate({x: neighbours[i].x, y: neighbours[i].y});
-        }
+        var neighbours = this.getNeighbours( this.active_units[index], pattern );
 
         this.releaseActiveUnit(index);
+
+        for(var i=0; i < neighbours.length ; i++) {
+            this.stimulate({x: neighbours[i].x, y: neighbours[i].y});
+        }
+
     }
 
 
-    getNeighboursByPattern(origin, pattern) {
+    getNeighbours(origin, pattern) {
 
         var result = [];
 
@@ -133,7 +150,7 @@ class Neuron {
             }
 
             var y = origin.y + pattern[i].y;
-            if(y<0 || y >= this.size) {
+            if(y < 0 || y >= this.size) {
                 continue;
             }
 
@@ -143,13 +160,37 @@ class Neuron {
         return result;
     }
 
+
     generatePropagationPatternArray(pattern_name, direction) {
+
+        var pattern = [];
 
         switch(pattern_name) {
             case 'o':
-                return [ {x: -1, y:-1}, {x: 0, y: -1}, {x: 1, y: -1}, {x: 1, y: 0}, {x: 1, y: 1}, {x: 0, y: 1}, {x: -1, y: 1}, {x: -1, y: 0} ]
+                pattern = [ {x: -1, y:-1}, 
+                            {x: 0, y: -1}, 
+                            {x: 1, y: -1}, 
+                            {x: 1, y: 0}, 
+                            {x: 1, y: 1}, 
+                            {x: 0, y: 1}, 
+                            {x: -1, y: 1}, 
+                            {x: -1, y: 0} ]
             break;
         }
+
+        switch(direction) {
+            case 'cw':
+                // Do nothing. Patterns are expecetd to be defined clocwise starting
+                // from top-left.
+
+            break;
+
+            case 'ccw':
+                pattern.reverse();
+            break;
+        }
+
+        return pattern;
     }
 
 
