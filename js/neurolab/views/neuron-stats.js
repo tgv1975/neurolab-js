@@ -19,18 +19,7 @@ var NeuronStatsView = Backbone.View.extend({
 	},
 
 	render: function() {
-
-		var attributes = this.model.toJSON();
-		var text = new Array();
-
-		this.$el.html(this.template(this.model.toJSON()));
-		// _.each( attributes, function( value, key ) {
-		// 	text.push( key.toUpperCase() + ': ' + value  );
-		// });
-
-		// text = text.join('<br/>')
-
-		// this.$el.html(text);
+		this.$el.html(this.template(this.model.toJSON(['dynamic'])));
 		return this;
 	}
 });

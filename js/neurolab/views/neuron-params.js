@@ -6,7 +6,7 @@
 
 var NeuronParamsView = Backbone.View.extend({
 	
-	el: '#neuron_stats',
+	el: '#neuron_params',
 
 	initialize: function() {
 
@@ -18,12 +18,7 @@ var NeuronParamsView = Backbone.View.extend({
 	},
 
 	render: function() {
-		
-		var attributes = this.model.toJSON();
-		var text = new Array();
-
-		this.$el.html(this.template(this.model.toJSON()));
-
+		this.$el.html(this.template(this.model.toJSON(['static'])));
 		return this;
 	}
 });

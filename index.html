@@ -30,16 +30,27 @@
 <body>
     <div class="container-fluid">
         <div class="row">
-            <div id="neuron_container" class="col-sm-6 col-md-6 col-lg-6">
+
+            <div id="neuron_container" class="col-sm-6 col-md-8 col-lg-8">
                 <canvas id="neuron_canvas" class="canvas-grid"></canvas>    
             </div>
-            <div id="neuron_stats" class="col-sm-6 col-md-6 col-lg-6">
+
+            <div id="neuron_params" class="col-sm-6 col-md-2 col-lg-2">
                 <ul class="list-unstyled">
                     {{#each this}}
                     <li>{{ucFirst (deSlugify @key)}}: {{this}}</li>
                     {{/each}}
                 </ul>
             </div>
+
+            <div id="neuron_stats" class="col-sm-6 col-md-2 col-lg-2">
+                <ul class="list-unstyled">
+                    {{#each this}}
+                    <li>{{ucFirst (deSlugify @key)}}: {{this}}</li>
+                    {{/each}}
+                </ul>            
+            </div>
+
         </div>
     </div>
 </body>
