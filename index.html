@@ -6,6 +6,7 @@
     
     <link rel="stylesheet" type="text/css" href="css/neurolab.css"/>
     <link rel="stylesheet" type="text/css" href="vendor/framework/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="vendor/font/font-awesome/css/font-awesome.min.css"/>
 
     <script>window.$ = window.jQuery = require('./vendor/js/jquery/jquery.js');</script>
 
@@ -32,25 +33,49 @@
         <div class="row">
 
             <div id="neuron_container" class="col-sm-6 col-md-8 col-lg-8">
-                <canvas id="neuron_canvas" class="canvas-grid"></canvas>    
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-map-o"></i> Neuron map</h3>
+                        </div>
+                        <div class="panel-body">            
+                            <canvas id="neuron_canvas" class="canvas-grid"></canvas>    
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div id="neuron_params" class="col-sm-6 col-md-2 col-lg-2">
-                <ul class="list-unstyled">
-                    {{#each this}}
-                    <li>{{ucFirst (deSlugify @key)}}: {{this}}</li>
-                    {{/each}}
-                </ul>
-            </div>
+            <div class="col-sm-6 col-md-4 col-lg-4">
+                <div id="neuron_params" class="col-sm-6 col-md-12 col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-cog"></i> Neuron parameters</h3>
+                        </div>
+                        <div class="panel-body">
+                            <ul class="list-unstyled">
+                                {{#each this}}
+                                <li>{{ucFirst (deSlugify @key)}}: {{this}}</li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
 
-            <div id="neuron_stats" class="col-sm-6 col-md-2 col-lg-2">
-                <ul class="list-unstyled">
-                    {{#each this}}
-                    <li>{{ucFirst (deSlugify @key)}}: {{this}}</li>
-                    {{/each}}
-                </ul>            
+                <div id="neuron_stats" class="col-sm-6 col-md-12 col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Realtime stats</h3>
+                        </div>
+                        <div class="panel-body">
+                            <ul class="list-unstyled">
+                                {{#each this}}
+                                <li>{{ucFirst (deSlugify @key)}}: {{this}}</li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
-
         </div>
     </div>
 </body>

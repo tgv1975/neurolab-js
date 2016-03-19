@@ -2,7 +2,7 @@
 
 $(document).ready( function() {
 	
-	var neuron = new Neuron(200);
+	var neuron = new Neuron(50);
 
 	neuron.on('afterReset', function(args) {
 		console.log(args);

@@ -152,6 +152,7 @@ class Propagator {
 
         if(this.active_unit_index >= this.active_units.length) {
             this.active_unit_index = 0;
+            this.cycles++;
         }
 
         if(this.active_units.length) {
@@ -285,7 +286,9 @@ class Propagator {
         if( include.indexOf('__all__') >= 0 || include.indexOf('dynamic') >= 0 ) {
             result = _.extend(result, {
                                     "active_units": this.active_units.length || 0,
-                                    "%_active": this.getActiveUnitsPercent()
+                                    "%_active": this.getActiveUnitsPercent(),
+                                    "active_unit_index": this.active_unit_index,
+                                    "cycles": this.cycles || 0
                                 });
         }
 
