@@ -61,6 +61,8 @@ class Propagator {
             this.matrix[i] = [];
         }
 
+        this.unit_count = this.size * this.size;
+
         this.active_units = [];
 
         this.trigger('afterReset', {size: this.size});
@@ -150,6 +152,7 @@ class Propagator {
 
         if(this.active_unit_index >= this.active_units.length) {
             this.active_unit_index = 0;
+            this.cycles++;
         }
 
         if(this.active_units.length) {
@@ -247,16 +250,50 @@ class Propagator {
     }
 
 
+    getActiveUnitsPercent() {
+        if( ! this.active_units.length ) {
+            return 0;            
+        }
+
+        return (this.active_units.length * 100) / this.unit_count;
+    }
+
+
     /**
     * Returns a JSON representation of the Propagator instance.
+    * @param {array} include - Array of object attributes to include. Possible
+    * values are:
+    * __all__: Include all attributes.
+    * static: include only the static attributes.
+    * dynamic: include only the dynamic attributes.
+    * Combinations are accepted.
     */
-    toJSON() {
+    toJSON( include ) {
 
-        return {
-            "size": this.size,
-            "unit_count": this.size * this.size,
-            "active_units": this.active_units.length || 0
-        }        
+        if(typeof include === 'undefined') {
+            include = ['__all__'];
+        }
+
+        var result = {};
+
+        if( include.indexOf('__all__') >= 0 || include.indexOf('static') >= 0 ) {
+            result = _.extend(result, {
+                                "size": this.size,
+                                "unit_count": this.unit_count,
+                            });
+        }
+
+        if( include.indexOf('__all__') >= 0 || include.indexOf('dynamic') >= 0 ) {
+            result = _.extend(result, {
+                                    "active_units": this.active_units.length || 0,
+                                    "%_active": this.getActiveUnitsPercent(),
+                                    "active_unit_index": this.active_unit_index,
+                                    "cycles": this.cycles || 0
+                                });
+        }
+
+        return result;
+
     }
 
 

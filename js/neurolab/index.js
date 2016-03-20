@@ -1,18 +1,16 @@
 "use strict";
 
-var neuron = new Neuron(50);
-
-neuron.on('afterReset', function(args) {
-	console.log(args);
-});
-
-var neuronCanvas;
-var neuronParamsView;
-
 $(document).ready( function() {
 	
-	neuronCanvas = new NeuronCanvas({model: neuron});
-	neuronParamsView = new NeuronParamsView({model: neuron});
+	var neuron = new Neuron(50);
+
+	neuron.on('afterReset', function(args) {
+		console.log(args);
+	});
+
+	var neuronCanvas = new NeuronCanvas({model: neuron});
+	var neuronParamsView = new NeuronParamsView({model: neuron});
+	var neuronStatsView = new NeuronStatsView({model: neuron});
 
 	// console.time( 'perf' )
 
