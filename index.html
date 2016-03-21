@@ -19,12 +19,14 @@
 
     <script type="text/javascript" src="vendor/js/handlebars/handlebars.js"></script>
     <script type="text/javascript" src="vendor/js/handlebars-helpers/handlebar-helpers-string.js"></script>
+    
+    <script type="text/javascript" src="vendor/js/moment/moment.min.js"></script>
 
     <script type="text/javascript" src="vendor/js/canvasgrid/canvasgrid.js"></script>
     <script type="text/javascript" src="js/neurolab/models/propagator.js"></script>
     <script type="text/javascript" src="js/neurolab/models/neuron.js"></script>
     <script type="text/javascript" src="js/neurolab/views/neuron-params.js"></script>
-    <script type="text/javascript" src="js/neurolab/views/neuron-stats.js"></script>
+    <script type="text/javascript" src="js/neurolab/views/neuron-monitor.js"></script>
     <script type="text/javascript" src="js/neurolab/views/neuron-canvas.js"></script>
     <script type="text/javascript" src="js/neurolab/index.js"></script>
 </head>
@@ -46,7 +48,7 @@
             </div>
 
             <div class="col-sm-6 col-md-4 col-lg-4">
-                <div id="neuron_params" class="col-sm-6 col-md-12 col-lg-12">
+                <div id="neuron_params" class="col-sm-12 col-md-12 col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title"><i class="fa fa-cog"></i> Neuron parameters</h3>
@@ -61,7 +63,7 @@
                     </div>
                 </div>
 
-                <div id="neuron_stats" class="col-sm-6 col-md-12 col-lg-12">
+                <div id="neuron_stats" class="col-sm-12 col-md-12 col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Realtime stats</h3>
