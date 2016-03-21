@@ -8,7 +8,7 @@ var NeuronCanvas = CanvasGrid.extend({
 
 	el: '#neuron_canvas',
 
-	zoom: 3,
+	zoom: 1,
 
 	events: {
 		'click': 'clickHandler',
