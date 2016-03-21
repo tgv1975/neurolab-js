@@ -18,7 +18,7 @@ var NeuronMonitorView = Backbone.View.extend({
 		this.listenTo(this.model, "stepComplete", this.onStepComplete)
 		this.listenTo(this.model, "cycleComplete", this.onCycleComplete)
 
-		this.listenTo(this.model, "afterUnitSet", this.render);
+		// this.listenTo(this.model, "afterUnitSet", this.render);
 
 		this.render();
 	},
@@ -38,7 +38,7 @@ var NeuronMonitorView = Backbone.View.extend({
 
 
 	onStepComplete: function() {
-		
+		this.render();
 	},
 
 
@@ -49,7 +49,8 @@ var NeuronMonitorView = Backbone.View.extend({
 			_.extend(snapshot, {
 						"process_start_time": this.process_start_timestring,
 						"process_ongoing_timedelta": this.getProcessDurationString(),
-						"steps_per_cycle": this.steps_per_cycle || 'pending...'
+						"steps_per_cycle": this.steps_per_cycle || 'pending...',
+						"steps_per_second": this.getStepsPerSecond() || 'pending...'
 					});
 		}
 		this.$el.html(this.template(snapshot));
@@ -61,6 +62,14 @@ var NeuronMonitorView = Backbone.View.extend({
 		var time_diff = new Date(Date.now() - this.process_start_timestamp);
 
 		return moment(time_diff).utcOffset(0).format('HH:mm:ss:SSS');
+	},
+
+
+	getStepsPerSecond: function() {
+		var time_diff_seconds = Math.trunc((Date.now() - this.process_start_timestamp) / 1000) || 1;
+		
+		return Math.trunc(this.model.steps / time_diff_seconds);
 	}
+
 
 });
