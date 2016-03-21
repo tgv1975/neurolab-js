@@ -10,7 +10,7 @@ $(document).ready( function() {
 
 	var neuronCanvas = new NeuronCanvas({model: neuron});
 	var neuronParamsView = new NeuronParamsView({model: neuron});
-	var neuronStatsView = new NeuronStatsView({model: neuron});
+	var neuronMonitorView = new NeuronMonitorView({model: neuron});
 
 	// console.time( 'perf' )
 

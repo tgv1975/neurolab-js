@@ -65,9 +65,9 @@ class Propagator {
 
         this.active_units = [];
 
-        this.trigger('afterReset', {size: this.size});
-
         this.trigger('change', {what: 'size', size: this.size, old_size: old_size});
+
+        this.trigger('afterReset', {size: this.size});
     }
 
 
@@ -130,8 +130,11 @@ class Propagator {
 
         this.pattern = this.generatePropagationPatternArray('o', 'cw');
 
-        this.active_unit_index = 0; 
+        this.active_unit_index = 0;
+        this.steps = 0;
         this.cycles = 0;
+
+        this.trigger('processStart');
 
         this.step();
 
@@ -153,6 +156,8 @@ class Propagator {
         if(this.active_unit_index >= this.active_units.length) {
             this.active_unit_index = 0;
             this.cycles++;
+
+            this.trigger("cycleComplete");
         }
 
         if(this.active_units.length) {
@@ -161,6 +166,8 @@ class Propagator {
             this.processing = false;
         }
 
+        this.steps++;
+        this.trigger("stepComplete");
     }
 
 
@@ -288,7 +295,8 @@ class Propagator {
                                     "active_units": this.active_units.length || 0,
                                     "%_active": this.getActiveUnitsPercent(),
                                     "active_unit_index": this.active_unit_index,
-                                    "cycles": this.cycles || 0
+                                    "steps": this.steps || 0,
+                                    "cycles": this.cycles || 0,
                                 });
         }
 
