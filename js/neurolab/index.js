@@ -11,6 +11,7 @@ $(document).ready( function() {
 	var neuronCanvas = new NeuronCanvas({model: neuron});
 	var neuronParamsView = new NeuronParamsView({model: neuron});
 	var neuronMonitorView = new NeuronMonitorView({model: neuron});
+	var neuronMonitorControlsView = new NeuronMonitorControlsView({model: neuronMonitorView});
 
 	// console.time( 'perf' )
 

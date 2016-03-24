@@ -22,3 +22,12 @@ Handlebars.registerHelper('deSlugify', function(str) {
 Handlebars.registerHelper('ucFirst', function(str) {
 	return str.charAt(0).toUpperCase() + str.slice(1);
 });
+
+
+Handlebars.registerHelper('checkedAttr', function(value) {
+	if(value) {
+		return ' checked="checked" ';
+	}
+
+	return '';
+});
