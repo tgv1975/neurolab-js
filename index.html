@@ -6,9 +6,12 @@
     
     <link rel="stylesheet" type="text/css" href="css/neurolab.css"/>
     <link rel="stylesheet" type="text/css" href="vendor/framework/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="vendor/js/bootstrap-switch/css/bootstrap-switch.min.css"/>
     <link rel="stylesheet" type="text/css" href="vendor/font/font-awesome/css/font-awesome.min.css"/>
 
     <script>window.$ = window.jQuery = require('./vendor/js/jquery/jquery.js');</script>
+
+    <script type="text/javascript" src="vendor/js/bootstrap-switch/js/bootstrap-switch.min.js"></script>
 
     <script type="text/javascript" src="vendor/js/underscore/underscore.js"></script>
     <script type="text/javascript" src="vendor/js/underscore/underscore.string.js"></script>
@@ -31,6 +34,28 @@
     <script type="text/javascript" src="js/neurolab/index.js"></script>
 </head>
 <body>
+    <!-- Handlebar Templates -->
+    <script id="neuron_params_template" type="text/x-handlebars-template">
+        <ul class="list-unstyled">
+            {{#each this}}
+            <li><b>{{ucFirst (deSlugify @key)}}:</b> {{this}}</li>
+            {{/each}}
+        </ul>
+    </script>
+
+    <script id="neuron_monitor_template" type="text/x-handlebars-template">
+        <ul class="list-unstyled">
+            {{#each this}}
+            <li><b>{{ucFirst (deSlugify @key)}}:</b> {{this}}</li>
+            {{/each}}
+        </ul>        
+    </script>
+
+    <script id="neuron_monitor_controls_template" type="text/x-handlebars-template">
+        <input id="monitor_switch" type="checkbox"{{#if monitoring}} checked{{/if}}/>
+    </script>
+    <!-- End Handlebar Templates -->
+
     <div class="container-fluid">
         <div class="row">
 
@@ -48,33 +73,28 @@
             </div>
 
             <div class="col-sm-6 col-md-4 col-lg-4">
-                <div id="neuron_params" class="col-sm-12 col-md-12 col-lg-12">
+                <div class="col-sm-12 col-md-12 col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title"><i class="fa fa-cog"></i> Neuron parameters</h3>
                         </div>
-                        <div class="panel-body">
-                            <ul class="list-unstyled">
-                                {{#each this}}
-                                <li><b>{{ucFirst (deSlugify @key)}}:</b> {{this}}</li>
-                                {{/each}}
-                            </ul>
+                        <div id="neuron_params" class="panel-body">                            
                         </div>
                     </div>
                 </div>
 
-                <div id="neuron_stats" class="col-sm-12 col-md-12 col-lg-12">
+                <div class="col-sm-12 col-md-12 col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Realtime stats</h3>
+                            <h3 class="panel-title">
+                                <i class="fa fa-bar-chart-o"></i>
+                                Realtime stats
+                                <div id="neuron_monitor_controls" class="pull-right">
+                                </div>
+                            </h3>
                         </div>
-                        <div class="panel-body">
-                            <ul class="list-unstyled">
-                                {{#each this}}
-                                <li><b>{{ucFirst (deSlugify @key)}}:</b> {{this}}</li>
-                                {{/each}}
-                            </ul>
-                        </div>
+                        <div id="neuron_monitor"class="panel-body">
+                        </div>                        
                     </div>
                 </div>
             </div>
