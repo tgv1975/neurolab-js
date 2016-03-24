@@ -28,6 +28,7 @@
     <script type="text/javascript" src="vendor/js/canvasgrid/canvasgrid.js"></script>
     <script type="text/javascript" src="js/neurolab/models/propagator.js"></script>
     <script type="text/javascript" src="js/neurolab/models/neuron.js"></script>
+    <script type="text/javascript" src="js/neurolab/views/propagator-controls.js"></script>
     <script type="text/javascript" src="js/neurolab/views/neuron-params.js"></script>
     <script type="text/javascript" src="js/neurolab/views/neuron-monitor.js"></script>
     <script type="text/javascript" src="js/neurolab/views/neuron-canvas.js"></script>
@@ -54,6 +55,16 @@
     <script id="neuron_monitor_controls_template" type="text/x-handlebars-template">
         <input id="monitor_switch" type="checkbox"{{#if monitoring}} checked{{/if}}/>
     </script>
+
+    <script id="neuron_controls_template" type="text/x-handlebars-template">
+        <div class="btn-group" role="group">
+            {{#if processing}}
+                <button id="propagator_pause_btn" type="button" class="btn btn-secondary"><i class="fa fa-pause"></i></button>
+            {{else}}
+                <button id="propagator_play_btn" type="button" class="btn btn-secondary"><i class="fa fa-play"></i></button>
+            {{/if}}
+        </div>        
+    </script>    
     <!-- End Handlebar Templates -->
 
     <div class="container-fluid">
@@ -68,6 +79,7 @@
                         <div class="panel-body">            
                             <canvas id="neuron_canvas" class="canvas-grid"></canvas>    
                         </div>
+                        <div id="neuron_controls" class="panel-footer"></div>                        
                     </div>
                 </div>
             </div>

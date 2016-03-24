@@ -2,16 +2,13 @@
 
 $(document).ready( function() {
 	
-	var neuron = new Neuron(200);
-
-	neuron.on('afterReset', function(args) {
-		console.log(args);
-	});
+	var neuron = new Neuron(100);
 
 	var neuronCanvas = new NeuronCanvas({model: neuron});
 	var neuronParamsView = new NeuronParamsView({model: neuron});
 	var neuronMonitorView = new NeuronMonitorView({model: neuron});
 	var neuronMonitorControlsView = new NeuronMonitorControlsView({model: neuronMonitorView});
+	var neuronControlsView = new PropagatorControlsView({el:"#neuron_controls", template_el:'#neuron_controls_template', model: neuron});
 
 	// console.time( 'perf' )
 

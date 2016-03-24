@@ -122,7 +122,7 @@ class Propagator {
     */
     process() {
 
-        if(this.processing) {
+        if(this.processing || !this.active_units.length) {
             return;
         }
 
@@ -138,6 +138,24 @@ class Propagator {
 
         this.step();
 
+    }
+
+    /**
+    *   Resumes the propagation process. Same as process(), but it does not reset 
+    * the active unit index, step, and cycle counters, etc.
+    */
+    resume() {
+        if(this.processing || !this.active_units.length) {
+            return;
+        }
+
+        this.processing = true;
+
+        this.pattern = this.generatePropagationPatternArray('o', 'cw');
+
+        this.trigger('processStart');
+
+        this.step();
     }
 
 
@@ -160,14 +178,27 @@ class Propagator {
             this.trigger("cycleComplete");
         }
 
-        if(this.active_units.length) {
-            setTimeout( this.step.bind(this) , 0);
+        // As long as there are active units and the processing flag hasn't been set
+        // to false, keep going.
+        if(this.active_units.length && this.processing) {
+            this.timer = setTimeout( this.step.bind(this) , 0);
         } else {
-            this.processing = false;
+            this.stopProcessing();
         }
 
         this.steps++;
         this.trigger("stepComplete");
+    }
+
+
+    /**
+    * Stops all processing by setting this.processing to false. This flag is checked in 
+    * step(), and if it's false, step() will stop calling itself.
+    */
+    stopProcessing() {
+        clearTimeout(this.timer);
+        this.processing = false;
+        this.trigger('processStop');
     }
 
 
