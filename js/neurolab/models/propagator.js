@@ -37,10 +37,12 @@ class Propagator {
     * @constructor
     * @param {integer} size - The size of the matrix.
     */
-    constructor(size) {       
+    constructor(args) {       
+
+        this.process_delay = args.process_delay || 0;
 
     	this.attachEvents();
-        this.reset(size);
+        this.reset(args.size);
 
     }
 
@@ -51,23 +53,34 @@ class Propagator {
     */    
     reset(size) {
 
-        var old_size = this.size || 0;
+        this.stopProcessing();
 
         this.size = size;
 
-        this.matrix = [[]];
+        this.active_units = [];
+        this.active_unit_index = 0;
+        this.steps = 0;
+        this.cycles = 0;        
 
-        for(var i=0; i < size; i++) {
-            this.matrix[i] = [];
-        }
+        this.initMatrix();
 
         this.unit_count = this.size * this.size;
 
-        this.active_units = [];
+        this.trigger('afterReset', this.size, this.size);
+    }
 
-        this.trigger('change', {what: 'size', size: this.size, old_size: old_size});
 
-        this.trigger('afterReset', {size: this.size});
+    /*
+    * Initializes the propagator matrix.
+    */
+    initMatrix() {
+
+        this.matrix = [[]];
+
+        for(var i=0; i < this.size; i++) {
+            this.matrix[i] = [];
+        }
+
     }
 
 
@@ -181,7 +194,7 @@ class Propagator {
         // As long as there are active units and the processing flag hasn't been set
         // to false, keep going.
         if(this.active_units.length && this.processing) {
-            this.timer = setTimeout( this.step.bind(this) , 0);
+            this.timer = setTimeout( this.step.bind(this) , this.process_delay);
         } else {
             this.stopProcessing();
         }

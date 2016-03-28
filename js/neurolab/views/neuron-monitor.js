@@ -31,6 +31,7 @@ var NeuronMonitorView = Backbone.View.extend({
 		this.listenTo(this.model, "processStart", this.onProcessStart)
 		this.listenTo(this.model, "stepComplete", this.onStepComplete)
 		this.listenTo(this.model, "cycleComplete", this.onCycleComplete)
+		this.listenTo(this.model, "afterReset", this.render);
 
 		// this.listenTo(this.model, "afterUnitSet", this.render);
 
@@ -64,6 +65,11 @@ var NeuronMonitorView = Backbone.View.extend({
 
 	onStepComplete: function() {
 		this.render();
+	},
+
+
+	reset: function() {
+		this.steps_per_cycle = 0;
 	},
 
 

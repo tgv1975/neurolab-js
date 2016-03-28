@@ -12,7 +12,7 @@ var NeuronParamsView = Backbone.View.extend({
 
 		this.template = Handlebars.compile($('#neuron_params_template').html());
 
-		this.listenTo(this.model, "change", this.render);
+		this.listenTo(this.model, "afterReset", this.render);
 
 		this.render();
 	},

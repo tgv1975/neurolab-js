@@ -31,7 +31,7 @@ var CanvasGrid = Backbone.View.extend({
 	},
 
 
-	initialize: function( width, height ) {
+	initialize: function(width, height) {
 
 		if(this.constructor === CanvasGrid) {
 			throw { 
@@ -49,18 +49,26 @@ var CanvasGrid = Backbone.View.extend({
 			};
     	}
 
+    	this.resize(width, height);
+    
+	},
+
+
+	resize: function(width, height) {
+
     	this.width = width;
     	this.height = height;
 
-		this.context = this.el.getContext('2d');
+    	if(!this.cursorCanvas) {
+			this.cursorCanvas = this.createSpriteCanvas(this.width, this.height);
+		}
 
-		this.cursorCanvas = this.createSpriteCanvas(this.width, this.height);
-		this.cursorContext = this.cursorCanvas.getContext('2d');
+    	this.context = this.el.getContext('2d');
+    	this.cursorContext = this.cursorCanvas.getContext('2d');
 
 		this.render();
 
 		this.drawCursor(this.colors.cursor);
-
 	},
 
 

@@ -2,7 +2,7 @@
 
 $(document).ready( function() {
 	
-	var neuron = new Neuron(100);
+	var neuron = new Neuron({size: 100, process_delay: 0});
 
 	var neuronCanvas = new NeuronCanvas({model: neuron});
 	var neuronParamsView = new NeuronParamsView({model: neuron});

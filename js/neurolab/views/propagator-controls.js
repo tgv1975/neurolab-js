@@ -12,12 +12,16 @@ var PropagatorControlsView = Backbone.View.extend({
 
 	events: {
 		'click #propagator_pause_btn': 'pausePropagator',
-		'click #propagator_play_btn': 'playPropagator'
+		'click #propagator_play_btn': 'playPropagator',
+		'click #propagator_reset_btn': 'resetPropagator'
 	},
 
 
 	initialize: function(args) {
-		this.template = Handlebars.compile($(args.template_el).html(), {noEscape: true});
+
+		this.$template_el = $(args.template_el);
+
+		this.template = Handlebars.compile(this.$template_el.html(), {noEscape: true});
 		this.render();
 
 		this.listenTo(this.model, "processStart", this.render);
@@ -42,6 +46,10 @@ var PropagatorControlsView = Backbone.View.extend({
 
 	playPropagator: function() {
 		this.model.resume();
-	}
+	},
 
+
+	resetPropagator: function() {
+		this.model.reset(this.model.size);
+	}
 });
