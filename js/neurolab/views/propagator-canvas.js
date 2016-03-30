@@ -1,12 +1,10 @@
 /**
-* Implements a graphical neuron view, by extending CanvasGrid.
+* Implements a graphical Propagator view by extending CanvasGrid.
 */
 
 "use strict;"
 
-var NeuronCanvas = CanvasGrid.extend({
-
-	el: '#neuron_canvas',
+var PropagatorCanvas = CanvasGrid.extend({
 
 	zoom: 3,
 
@@ -17,11 +15,11 @@ var NeuronCanvas = CanvasGrid.extend({
 
 	initialize: function() {
 
-		if(!(this.model instanceof Neuron) ) {
+		if(!(this.model instanceof Propagator) ) {
 
 			throw { 
-			    name: "NeuronCanvas Error", 
-			    message: "NeuronMap initialized without a valid Neuron object.", 
+			    name: "PropagatorCanvas Error", 
+			    message: "PropagarorCanvas initialized without a valid Propagator object.", 
 			    toString: function(){return this.name + ": " + this.message;} 
 			};
 

@@ -1,23 +1,23 @@
 /**
-* Implements NeuronMonitorView and NeuronMonitorControlsView to use with a Neuron object.
+* Implements PropagatorMonitorView and PropagatorMonitorControlsView to use with a Propagator object.
 */
 
 "use strict;"
 
 
 /**
-* Implements a view that displays dynamic Neuron parameters in real time.
-* The view's model must be a Neuron object. Data is read from it on certain events.
+* Implements a view that displays dynamic Propagator parameters in real time.
+* The view's model must be a Propagator object. Data is read from it on certain events.
 * 
 */
-var NeuronMonitorView = Backbone.View.extend({
-	
-	el: '#neuron_monitor',
+var PropagatorMonitorView = Backbone.View.extend({
 
 
-	initialize: function() {
+	initialize: function(args) {
 
-		this.template = Handlebars.compile($('#neuron_monitor_template').html()),
+		this.$template_el = $(args.template_el);
+
+		this.template = Handlebars.compile(this.$template_el.html()),
 
 		this.listenTo(this.model, "change", this.render);
 
@@ -125,21 +125,21 @@ var NeuronMonitorView = Backbone.View.extend({
 
 /**
 * Implements a helper view that uses another view as its model! Namely, a 
-* NeuronMonitorView. This is not documented, so it might be a dangerous hack.
-* The goal is to be able to control the NeuronMonitorView during intensive Neuron
-* processing. This functionality was initially implemented in the NeuronMonitorView,
+* PropagatorMonitorView. This is not documented, so it might be a dangerous hack.
+* The goal is to be able to control the PropagatorMonitorView during intensive Propagator
+* processing. This functionality was initially implemented in the PropagatorMonitorView,
 * but click evens would not register due to fast DOM updates of that view.
 */
-var NeuronMonitorControlsView = Backbone.View.extend({
-
-	el: '#neuron_monitor_controls',
+var PropagatorMonitorControlsView = Backbone.View.extend({
 
 	events: {
 		'switchChange.bootstrapSwitch #monitor_switch': 'monitorToggle'
 	},
 
-	initialize: function() {
-		this.template = Handlebars.compile($('#neuron_monitor_controls_template').html());
+	initialize: function(args) {
+		this.$template_el = $(args.template_el);
+
+		this.template = Handlebars.compile(this.$template_el.html());
 
 		this.render();
 	},

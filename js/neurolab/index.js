@@ -2,13 +2,36 @@
 
 $(document).ready( function() {
 	
-	var neuron = new Neuron({size: 100, process_delay: 0});
+	var neuron = new Neuron({size: 50, process_delay: 0});
 
-	var neuronCanvas = new NeuronCanvas({model: neuron});
-	var neuronParamsView = new NeuronParamsView({model: neuron});
-	var neuronMonitorView = new NeuronMonitorView({model: neuron});
-	var neuronMonitorControlsView = new NeuronMonitorControlsView({model: neuronMonitorView});
-	var neuronControlsView = new PropagatorControlsView({el:"#neuron_controls", template_el:'#neuron_controls_template', model: neuron});
+	
+	var neuronCanvas = new PropagatorCanvas({
+											model: neuron, 
+											el: '#neuron_canvas'
+										});
+	
+	var neuronParamsView = new PropagatorParamsView({
+											model: neuron,
+											el: '#neuron_params',
+											template_el: '#neuron_params_template'
+										});
+	
+	var neuronMonitorView = new PropagatorMonitorView({
+											model: neuron,
+											el: '#neuron_monitor',
+											template_el: '#neuron_monitor_template'
+										});
+	
+	var neuronMonitorControlsView = new PropagatorMonitorControlsView({
+											model: neuronMonitorView,
+											el: '#neuron_monitor_controls',
+											template_el: '#neuron_monitor_controls_template'});
+
+	var neuronControlsView = new PropagatorControlsView({
+											model: neuron,
+											el:"#neuron_controls",
+											template_el:'#neuron_controls_template'
+										});
 
 	// console.time( 'perf' )
 
