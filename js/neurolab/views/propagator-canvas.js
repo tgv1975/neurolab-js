@@ -13,6 +13,7 @@ var PropagatorCanvas = CanvasGrid.extend({
 		'mousemove': 'mouseMoveHandler'
 	},
 
+
 	initialize: function() {
 
 		if(!(this.model instanceof Propagator) ) {
@@ -42,7 +43,7 @@ var PropagatorCanvas = CanvasGrid.extend({
 			case 1:
 				this.plotByTile(x, y, 'red');
 			break;
-		}		
+		}
 	},
 
 

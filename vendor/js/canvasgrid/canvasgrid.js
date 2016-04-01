@@ -131,12 +131,14 @@ var CanvasGrid = Backbone.View.extend({
 		this.context.closePath();
 	},
 
+
 	plotByTile: function(x, y, color) {
 		x = x * this.zoom;
 		y =y * this.zoom;
 
 		this.plot(x, y, color);
 	},
+	
 	
 	drawCursor: function(color) {
 		this.cursorContext.beginPath();
@@ -280,7 +282,7 @@ var CanvasGrid = Backbone.View.extend({
 		}
 	}
 
-	
+
 });
 
 

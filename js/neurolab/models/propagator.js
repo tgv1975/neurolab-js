@@ -303,6 +303,19 @@ class Propagator {
     }
 
 
+    /**
+    * Gets the coordinates of the active unit in the Propagator matrix.
+    * @return {Object} Object containing unit's coordinates.
+    */
+    getActiveUnitCoords() {
+        if(!this.active_units) {
+            return null;
+        }
+        return this.active_units[this.active_unit_index];
+    }
+
+
+
     getActiveUnitsPercent() {
         if( ! this.active_units.length ) {
             return 0;            
@@ -350,10 +363,17 @@ class Propagator {
         }
 
         if( include.indexOf('__all__') >= 0 || include.indexOf('dynamic') >= 0 ) {
+            
+            var active_unit_coords = this.getActiveUnitCoords();
+            if(active_unit_coords) {
+                active_unit_coords = JSON.stringify(active_unit_coords);
+            }
+
             result = _.extend(result, {
                                     "active_units": this.active_units.length || 0,
                                     "%_active": this.getActiveUnitsPercent(),
                                     "active_unit_index": this.active_unit_index,
+                                    "active_unit_coords": active_unit_coords,
                                     "steps": this.steps || 0,
                                     "cycles": this.cycles || 0,
                                 });
