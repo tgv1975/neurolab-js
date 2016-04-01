@@ -18,6 +18,8 @@ var CanvasGrid = Backbone.View.extend({
 	el: '', // Child class must provide a valid DOM element selector.
 
 	zoom: 1,
+	min_zoom: 1, // This can be increased, but setting it below 1 will be ignored.
+	max_zoom: 100,
 
 	colors: {
 		background: 'lime',
@@ -28,6 +30,7 @@ var CanvasGrid = Backbone.View.extend({
 		'click': 'clickHandler',
 		'mousemove': 'mouseMoveHandler',
 		'mouseout': 'mouseOutHandler',
+		'mousewheel': 'wheelHandler'
 	},
 
 
@@ -36,7 +39,7 @@ var CanvasGrid = Backbone.View.extend({
 		if(this.constructor === CanvasGrid) {
 			throw { 
 			    name: "CanvasGrid Error", 
-			    message: "Cannot instantiate CanvasGrid directly! You must extend it, and provide the required properties.",
+			    message: "Cannot instantiate CanvasGrid directly! You must extend it and provide the required properties.",
 			    toString: function(){return this.name + ": " + this.message;} 
 			};
     	}
@@ -212,6 +215,27 @@ var CanvasGrid = Backbone.View.extend({
     },
 	
 
+    zoomIn: function() {
+    	if(this.zoom + 1 <= this.max_zoom) {
+    		this.zoom++;
+    		this.render();
+    	}
+    },
+
+
+    zoomOut: function() {
+    	if(this.zoom - 1 >= this.min_zoom ) {
+    		this.zoom--;
+
+    		if(this.zoom < 1) {
+    			this.zoom = 1;
+    		}
+
+    		this.render();
+    	}
+    },
+
+
 	clickHandler: function(event) {
 
 		var coords = this.getMousePosToGrid(event);
@@ -241,11 +265,24 @@ var CanvasGrid = Backbone.View.extend({
 	},
 
 
-	mouseOutHandler: function(event){
+	mouseOutHandler: function(event) {
 		return event;
+	},
+
+
+	wheelHandler: function(event) {
+		if(event.ctrlKey) {
+			if(event.originalEvent.wheelDelta > 0 ) {
+				this.zoomIn();
+			} else {
+				this.zoomOut();
+			}
+		}
 	}
 
+	
 });
+
 
 CanvasGrid.extend = function(child) {
 	var view = Backbone.View.extend.apply(this, arguments);

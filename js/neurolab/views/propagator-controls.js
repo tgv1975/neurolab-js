@@ -13,10 +13,17 @@ var PropagatorControlsView = Backbone.View.extend({
 	events: {
 		'click #propagator_pause_btn': 'pausePropagator',
 		'click #propagator_play_btn': 'playPropagator',
-		'click #propagator_reset_btn': 'resetPropagator'
+		'click #propagator_reset_btn': 'resetPropagator',
+		'input #propagator_delay': 'setProcessDelay'
 	},
 
-
+    /**
+    * @constructor
+    * @param {Object} args - Arguments for the constructor.
+    * @param {Object} args.model - A Propagator object.
+    * @param {string} args.el - DOM element selector for this view's element.
+    * @param {string} args.template_el - DOM element selector for the script node containing the Handlebars template.
+    */
 	initialize: function(args) {
 
 		this.$template_el = $(args.template_el);
@@ -32,10 +39,13 @@ var PropagatorControlsView = Backbone.View.extend({
 	render: function() {
 
 		var data = {
-					'processing': this.model.processing
+					'processing': this.model.processing,
+					'process_delay': this.model.process_delay
 			};
 
 		this.$el.html(this.template(data));
+
+		return this;
 	},
 
 
@@ -51,5 +61,12 @@ var PropagatorControlsView = Backbone.View.extend({
 
 	resetPropagator: function() {
 		this.model.reset(this.model.size);
+	},
+
+
+	setProcessDelay: function(event) {
+		this.model.setProcessDelay($(event.target).val());
 	}
+
+
 });

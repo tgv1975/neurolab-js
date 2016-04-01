@@ -13,6 +13,7 @@ var PropagatorParamsView = Backbone.View.extend({
 		this.template = Handlebars.compile(this.$template_el.html());
 
 		this.listenTo(this.model, "afterReset", this.render);
+		this.listenTo(this.model, "change", this.render);
 
 		this.render();
 	},

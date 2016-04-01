@@ -22,6 +22,7 @@
 
     <script type="text/javascript" src="vendor/js/handlebars/handlebars.js"></script>
     <script type="text/javascript" src="vendor/js/handlebars-helpers/handlebar-helpers-string.js"></script>
+    <script type="text/javascript" src="vendor/js/handlebars-helpers/handlebar-helpers-time.js"></script>
     
     <script type="text/javascript" src="vendor/js/moment/moment.min.js"></script>
 
@@ -57,14 +58,22 @@
     </script>
 
     <script id="neuron_controls_template" type="text/x-handlebars-template">
-        <div class="btn-group" role="group">
-            {{#if processing}}
-                <button id="propagator_pause_btn" type="button" class="btn btn-secondary"><i class="fa fa-pause"></i></button>
-            {{else}}
-                <button id="propagator_play_btn" type="button" class="btn btn-secondary"><i class="fa fa-play"></i></button>
-            {{/if}}
-            <button id="propagator_reset_btn" type="button" class="btn btn-secondary"><i class="fa fa-stop"></i></button>
-        </div>        
+        <div class="row">
+            <div class="col-md-2 col-lg-2">
+                <div class="btn-group" role="group">
+                    {{#if processing}}
+                        <button id="propagator_pause_btn" type="button" class="btn btn-secondary"><i class="fa fa-pause"></i></button>
+                    {{else}}
+                        <button id="propagator_play_btn" type="button" class="btn btn-secondary"><i class="fa fa-play"></i></button>
+                    {{/if}}
+                    <button id="propagator_reset_btn" type="button" class="btn btn-secondary"><i class="fa fa-stop"></i></button>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-4">
+                <label for="propagator-delay">Delay</label>
+                <input id="propagator_delay" type="range" value="{{this.process_delay}}" max="10000">
+            </div>        
+        </div>
     </script>    
     <!-- End Handlebar Templates -->
 

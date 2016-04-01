@@ -35,7 +35,9 @@ class Propagator {
 
     /**
     * @constructor
-    * @param {integer} size - The size of the matrix.
+    * @param {Object} args - Arguments for the constructor.
+    * @param {int} args.size - Propagator matrix size.
+    * @param {int} args.process_delay - Processing delay in milliseconds.
     */
     constructor(args) {       
 
@@ -311,6 +313,18 @@ class Propagator {
 
 
     /**
+    * Sets the processing delay in milliseconds and triggers a change event.
+    * @param {int} milliseconds - Milliseconds to delay processing loop by.
+    */
+    setProcessDelay(milliseconds) {
+        if(milliseconds != this.process_delay) {
+            this.process_delay = milliseconds;
+            this.trigger('change');
+        }
+    }
+
+
+    /**
     * Returns a JSON representation of the Propagator instance.
     * @param {array} include - Array of object attributes to include. Possible
     * values are:
@@ -319,7 +333,7 @@ class Propagator {
     * dynamic: include only the dynamic attributes.
     * Combinations are accepted.
     */
-    toJSON( include ) {
+    toJSON(include) {
 
         if(typeof include === 'undefined') {
             include = ['__all__'];
@@ -331,6 +345,7 @@ class Propagator {
             result = _.extend(result, {
                                 "size": this.size,
                                 "unit_count": this.unit_count,
+                                "process_delay": this.process_delay
                             });
         }
 
