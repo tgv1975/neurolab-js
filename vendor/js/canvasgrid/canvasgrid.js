@@ -139,7 +139,7 @@ var CanvasGrid = Backbone.View.extend({
 		this.plot(x, y, color);
 	},
 	
-	
+
 	drawCursor: function(color) {
 		this.cursorContext.beginPath();
 		this.cursorContext.lineWidth = 2;
@@ -221,6 +221,7 @@ var CanvasGrid = Backbone.View.extend({
     	if(this.zoom + 1 <= this.max_zoom) {
     		this.zoom++;
     		this.render();
+    		this.drawCursor(this.colors.cursor);
     	}
     },
 
@@ -234,6 +235,7 @@ var CanvasGrid = Backbone.View.extend({
     		}
 
     		this.render();
+    		this.drawCursor(this.colors.cursor);
     	}
     },
 
