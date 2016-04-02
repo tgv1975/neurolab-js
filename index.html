@@ -44,11 +44,29 @@
     </script>
 
     <script id="neuron_params_template" type="text/x-handlebars-template">
-        <ul class="list-unstyled">
-            {{#each this}}
-            <li><b>{{ucFirst (deSlugify @key)}}:</b> {{this}}</li>
-            {{/each}}
-        </ul>
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label for="propagator_width" class="control-label col-xs-2">Width:</label>
+                <div class="col-xs-10">
+                    <input id="propagator_width" name="propagator_width" value="{{this.width}}" type="number" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="propagator_height" class="control-label col-xs-2">Height:</label>
+                <div class="col-xs-10">
+                    <input id="propagator_height" name="propagator_height" value="{{this.height}}" type="number" class="form-control">
+                </div>
+            </div>
+            <div class="form-group col-xs-12">
+                <label class="control-label text-muted">Unit count: {{this.unit_count}}</label>
+            </div>
+            <div class="form-group">
+                <label for="propagator_process_delay" class="control-label col-xs-2">Delay:</label>
+                <div class="col-xs-10">
+                    <input id="propagator_process_delay" name="propagator_process_delay" value="{{this.process_delay}}" type="number" class="form-control">
+                </div>
+            </div>            
+        </div>
     </script>
 
     <script id="neuron_monitor_template" type="text/x-handlebars-template">

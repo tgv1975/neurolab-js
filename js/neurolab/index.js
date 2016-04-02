@@ -10,7 +10,7 @@ $(document).ready( function() {
 											el: '#neuron_canvas',
 										});
 	
-	var neuronCanvasControlsVie = new PropagatorCanvasControlsView({
+	var neuronCanvasControlsView = new PropagatorCanvasControlsView({
 											model: neuronCanvas,
 											el: '#neuron_canvas_controls',
 											template_el: '#neuron_canvas_controls_template'

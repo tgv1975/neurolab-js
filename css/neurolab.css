@@ -3,7 +3,7 @@ body {
 }
 
 #neuron_container .panel-body{
-	max-height: 50vh;
+	max-height: 80vh;
 	overflow: auto;
 }
 
