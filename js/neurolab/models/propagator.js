@@ -36,28 +36,39 @@ class Propagator {
     /**
     * @constructor
     * @param {Object} args - Arguments for the constructor.
-    * @param {int} args.size - Propagator matrix size.
+    * @param {int} args.width - Propagator matrix width.
+    * @param {int} args.height - Propagator matrix height.
     * @param {int} args.process_delay - Processing delay in milliseconds.
     */
-    constructor(args) {       
+    constructor(args) {
 
         this.process_delay = args.process_delay || 0;
 
     	this.attachEvents();
-        this.reset(args.size);
+        this.reset(args.width, args.height);
 
     }
 
 
     /**
     * Creates the actual matrix (bidimensional) array.
-    * @param {integer} size - The size of the matrix.
+    * @param {integer} width - The width of the matrix.
+    * @param {integer} height - The height of the matrix.
     */    
-    reset(size) {
+    reset(width, height) {
 
+        if(!width || !height || width <= 0 || height <= 0) {
+            throw { 
+                name: "Propagator Error", 
+                message: sprintf("Trying to instance a propagator with invalid dimensions (%(width)s x %(height)s).", 
+                                {width: width, height: height}),
+                toString: function(){return this.name + ": " + this.message;} 
+            };
+        }
         this.stopProcessing();
 
-        this.size = size;
+        this.width = width;
+        this.height = height;
 
         this.active_units = [];
         this.active_unit_index = 0;
@@ -66,9 +77,9 @@ class Propagator {
 
         this.initMatrix();
 
-        this.unit_count = this.size * this.size;
+        this.unit_count = this.width * this.height;
 
-        this.trigger('afterReset', this.size, this.size);
+        this.trigger('afterReset', this.width, this.height);
     }
 
 
@@ -79,7 +90,7 @@ class Propagator {
 
         this.matrix = [[]];
 
-        for(var i=0; i < this.size; i++) {
+        for(var i=0; i < this.width; i++) {
             this.matrix[i] = [];
         }
 
@@ -247,12 +258,12 @@ class Propagator {
         for(var i=0; i < pattern.length; i++ ) {
 
             var x = origin.x + pattern[i].x;
-            if(x < 0 || x >= this.size ) {
+            if(x < 0 || x >= this.width ) {
                 continue;
             }
 
             var y = origin.y + pattern[i].y;
-            if(y < 0 || y >= this.size) {
+            if(y < 0 || y >= this.height) {
                 continue;
             }
 
@@ -356,7 +367,8 @@ class Propagator {
 
         if( include.indexOf('__all__') >= 0 || include.indexOf('static') >= 0 ) {
             result = _.extend(result, {
-                                "size": this.size,
+                                "width": this.width,
+                                "height": this.height,
                                 "unit_count": this.unit_count,
                                 "process_delay": this.process_delay
                             });

@@ -2,7 +2,7 @@
 
 $(document).ready( function() {
 	
-	var neuron = new Neuron({size: 50, process_delay: 0});
+	var neuron = new Neuron({width: 50, height: 20, process_delay: 0});
 
 	
 	var neuronCanvas = new PropagatorCanvas({

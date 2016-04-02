@@ -60,7 +60,7 @@ var PropagatorControlsView = Backbone.View.extend({
 
 
 	resetPropagator: function() {
-		this.model.reset(this.model.size);
+		this.model.reset(this.model.width, this.model.height);
 	},
 
 

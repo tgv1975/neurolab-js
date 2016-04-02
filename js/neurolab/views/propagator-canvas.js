@@ -30,7 +30,7 @@ var PropagatorCanvas = CanvasGrid.extend({
 		this.listenTo(this.model, "afterUnitRelease", this.fillUnit);
 		this.listenTo(this.model, "afterReset", this.resize);
 
-		CanvasGrid.prototype.initialize.apply(this, [this.model.size, this.model.size]);
+		CanvasGrid.prototype.initialize.apply(this, [this.model.width, this.model.height]);
 	},
 
 
