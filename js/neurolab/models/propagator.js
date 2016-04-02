@@ -65,6 +65,7 @@ class Propagator {
                 toString: function(){return this.name + ": " + this.message;} 
             };
         }
+        
         this.stopProcessing();
 
         this.width = width;

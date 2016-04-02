@@ -7,9 +7,15 @@ $(document).ready( function() {
 	
 	var neuronCanvas = new PropagatorCanvas({
 											model: neuron, 
-											el: '#neuron_canvas'
+											el: '#neuron_canvas',
 										});
 	
+	var neuronCanvasControlsVie = new PropagatorCanvasControlsView({
+											model: neuronCanvas,
+											el: '#neuron_canvas_controls',
+											template_el: '#neuron_canvas_controls_template'
+										});
+
 	var neuronParamsView = new PropagatorParamsView({
 											model: neuron,
 											el: '#neuron_params',

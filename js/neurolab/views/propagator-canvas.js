@@ -26,11 +26,27 @@ var PropagatorCanvas = CanvasGrid.extend({
 
 		}
 
+		this.attachProcessEvents();
+
+		CanvasGrid.prototype.initialize.apply(this, [this.model.width, this.model.height]);
+	},
+
+
+	attachProcessEvents: function() {
 		this.listenTo(this.model, "afterUnitSet", this.fillUnit);
 		this.listenTo(this.model, "afterUnitRelease", this.fillUnit);
 		this.listenTo(this.model, "afterReset", this.resize);
 
-		CanvasGrid.prototype.initialize.apply(this, [this.model.width, this.model.height]);
+		this.monitoring = true;
+	},
+
+
+	detachProcessEvents: function() {
+		this.stopListening(this.model, "afterUnitSet");
+		this.stopListening(this.model, "afterUnitRelease");
+		this.stopListening(this.model, "afterReset");
+
+		this.monitoring = false;
 	},
 
 
@@ -44,6 +60,19 @@ var PropagatorCanvas = CanvasGrid.extend({
 				this.plotByTile(x, y, 'red');
 			break;
 		}
+	},
+
+
+	monitorToggle: function(checked) {
+
+		if(checked){
+			this.attachProcessEvents();
+		} else {
+			this.detachProcessEvents();
+		}
+
+		return true;
+		
 	},
 
 
@@ -66,4 +95,35 @@ var PropagatorCanvas = CanvasGrid.extend({
 
 	}
 
+});
+
+/**
+* Implements a helper view that uses another view as its model! Namely, a 
+* PropagatorCanvasView. This is not documented, so it might be a dangerous hack.
+*/
+var PropagatorCanvasControlsView = Backbone.View.extend({
+
+	events: {
+		'switchChange.bootstrapSwitch #canvas_switch': 'monitorToggle'
+	},
+
+
+	initialize: function(args) {
+		this.$template_el = $(args.template_el);
+
+		this.template = Handlebars.compile(this.$template_el.html());
+
+		this.render();
+	},
+
+
+	render: function() {
+		this.$el.html(this.template({monitoring: this.model.monitoring}));
+		$('#canvas_switch').bootstrapSwitch({size: 'mini', onColor:'danger'});
+	},
+
+
+	monitorToggle: function(event) {
+		return this.model.monitorToggle(event.target.checked);
+	}
 });
