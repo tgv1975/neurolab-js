@@ -14,7 +14,6 @@ var PropagatorControlsView = Backbone.View.extend({
 		'click #propagator_pause_btn': 'pausePropagator',
 		'click #propagator_play_btn': 'playPropagator',
 		'click #propagator_reset_btn': 'resetPropagator',
-		'input #propagator_delay': 'setProcessDelay'
 	},
 
     /**
@@ -40,7 +39,6 @@ var PropagatorControlsView = Backbone.View.extend({
 
 		var data = {
 					'processing': this.model.processing,
-					'process_delay': this.model.process_delay
 			};
 
 		this.$el.html(this.template(data));
@@ -62,11 +60,6 @@ var PropagatorControlsView = Backbone.View.extend({
 	resetPropagator: function() {
 		this.model.reset(this.model.width, this.model.height);
 	},
-
-
-	setProcessDelay: function(event) {
-		this.model.setProcessDelay($(event.target).val());
-	}
 
 
 });
