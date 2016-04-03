@@ -29,12 +29,16 @@
     <script type="text/javascript" src="vendor/js/moment/moment.min.js"></script>
 
     <script type="text/javascript" src="vendor/js/canvasgrid/canvasgrid.js"></script>
+
+    <script type="text/javascript" src="js/neurolab/models/propagator-unit-engine.js"></script>
+    <script type="text/javascript" src="js/neurolab/models/propagator-unit.js"></script>
     <script type="text/javascript" src="js/neurolab/models/propagator.js"></script>
     <script type="text/javascript" src="js/neurolab/models/neuron.js"></script>
     <script type="text/javascript" src="js/neurolab/views/propagator-controls.js"></script>
     <script type="text/javascript" src="js/neurolab/views/propagator-params.js"></script>
     <script type="text/javascript" src="js/neurolab/views/propagator-monitor.js"></script>
     <script type="text/javascript" src="js/neurolab/views/propagator-canvas.js"></script>
+    <script type="text/javascript" src="js/neurolab/views/propagator-unit-inspector.js"></script>
     <script type="text/javascript" src="js/neurolab/index.js"></script>
 </head>
 <body>
@@ -108,6 +112,16 @@
             </div>
         </nav>
     </script>
+
+    <script id="unit_inspector_template" type="text/x-handlebars-template">
+    {{#if this}}
+    <ul class="list-unstyled">
+        <li><b>Unit@</b>{{this.coords.x}}/{{this.coords.y}}</li>
+    </ul>
+    {{else}}
+    Select a unit to inspect.
+    {{/if}}
+    </script>
     <!-- End Handlebar Templates -->
 
     <div class="container-fluid">
@@ -145,6 +159,8 @@
                         </div>
                         <div id="neuron_params" class="panel-body">                            
                         </div>
+                        <div class="panel-footer">
+                        </div>
                     </div>
                 </div>
 
@@ -159,9 +175,27 @@
                             </h3>
                         </div>
                         <div id="neuron_monitor"class="panel-body">
-                        </div>                        
+                        </div>
+                        <div class="panel-footer">
+                        </div>
                     </div>
                 </div>
+
+
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <i class="fa fa-search"></i>
+                                Unit inspector
+                            </h3>
+                        </div>
+                        <div id="unit_inspector"class="panel-body">
+                        </div>
+                        <div class="panel-footer">
+                        </div>
+                    </div>
+                </div>                
             </div>
         </div>
     </div>

@@ -39,6 +39,14 @@ $(document).ready( function() {
 											template_el:'#neuron_controls_template'
 										});
 
+	var neuronUnitInspector = new PropagatorUnitInspectorView({
+											model: null,
+											unit_selector: neuronCanvas,
+											el:"#unit_inspector",
+											template_el:'#unit_inspector_template'
+										});
+
+
 	// console.time( 'perf' )
 
 	function plotRandom() {

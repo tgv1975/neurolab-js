@@ -82,6 +82,8 @@ var PropagatorCanvas = CanvasGrid.extend({
 		
 		this.model.set(coords);
 
+		this.trigger('selectUnit', this.model.get(coords), coords);
+
 		// DO NOT call parent method here, the drawing will be handled in the
 		// callback triggered by Propagator.set().
 

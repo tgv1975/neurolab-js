@@ -1,27 +1,10 @@
 /**
 * Implements the Propagator class.
+*
+* Dependencies: PropagatorUnit.
 */
 
 "use strict";
-
-class Depolarizer {
-
-
-	constructor() {
-
-	}
-
-}
-
-class PropagatorUnit {
-
-
-        constructor(status) {
-            this.status = status;
-            this.engine = new Depolarizer();
-        }
-
-}
 
 
 /**
@@ -65,7 +48,7 @@ class Propagator {
                 toString: function(){return this.name + ": " + this.message;} 
             };
         }
-        
+
         this.stopProcessing();
 
         this.width = width;
@@ -101,13 +84,13 @@ class Propagator {
     /**
     * Check if the matrix cell at given coordinates can be set.
     * @param {object} coords - A set of coordinates like {x: left, y: top}.
-    * @return {boolean} True of unit can be set, false otherwise.
+    * @return {boolean} True if unit can be set, false otherwise.
     */
     canSet(coords) {
         if(typeof this.matrix[coords.x][coords.y] === 'undefined') {
             return true;
         }
-        return this.matrix[coords.x][coords.y]['status'] === 0;
+        return this.matrix[coords.x][coords.y].canSet();
     }
 
 
@@ -122,7 +105,7 @@ class Propagator {
         }
 
         this.active_units.push(coords);
-        this.matrix[coords.x][coords.y] = new PropagatorUnit(1);
+        this.matrix[coords.x][coords.y] = new PropagatorUnit();
 
         this.trigger('afterUnitSet', coords.x, coords.y, this.matrix[coords.x][coords.y]);
 
@@ -137,7 +120,7 @@ class Propagator {
     releaseActiveUnit(index) {
         var coords = {x: this.active_units[index].x, y: this.active_units[index].y}
 
-        this.matrix[coords.x][coords.y]['status'] = 0;
+        this.matrix[coords.x][coords.y].status = 0;
         this.active_units.splice(index, 1);
 
         this.trigger('afterUnitRelease', coords.x, coords.y, this.matrix[coords.x][coords.y]);
@@ -243,6 +226,15 @@ class Propagator {
             this.set({x: neighbours[i].x, y: neighbours[i].y});
         }
 
+    }
+
+
+    /**
+    * Gets whatever exists in the matreix at the given coordinates.
+    * @param {object} coords - a pair of {x, y} coordinates. 
+    */
+    get(coords) {
+        return this.matrix[coords.x][coords.y];
     }
 
 
