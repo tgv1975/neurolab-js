@@ -25,9 +25,10 @@ class Propagator {
     */
     constructor(args) {
 
+        this.attachEvents();
+
         this.process_delay = args.process_delay || 0;
 
-    	this.attachEvents();
         this.reset(args.width, args.height);
 
     }
@@ -87,10 +88,10 @@ class Propagator {
     * @return {boolean} True if unit can be set, false otherwise.
     */
     canSet(coords) {
-        if(typeof this.matrix[coords.x][coords.y] === 'undefined') {
+        if(!this.matrix[coords.x][coords.y]) {
             return true;
         }
-        return this.matrix[coords.x][coords.y].canSet();
+        return this.matrix[coords.x][coords.y].finished();
     }
 
 
@@ -120,10 +121,12 @@ class Propagator {
     releaseActiveUnit(index) {
         var coords = {x: this.active_units[index].x, y: this.active_units[index].y}
 
-        this.matrix[coords.x][coords.y].status = 0;
-        this.active_units.splice(index, 1);
+        if(this.matrix[coords.x][coords.y].finished()) {
 
-        this.trigger('afterUnitRelease', coords.x, coords.y, this.matrix[coords.x][coords.y]);
+            this.active_units.splice(index, 1);
+            this.trigger('afterUnitRelease', coords.x, coords.y, this.matrix[coords.x][coords.y]);
+
+        }
     }
 
 
@@ -218,8 +221,12 @@ class Propagator {
     * @param {array} pattern - An array of coordinate sets used to calculate the neighbouring units coordinates.
     */
     propagate(index, pattern) {
+        
         var neighbours = this.getNeighbourCoords( this.active_units[index], pattern );
 
+        var coords = this.active_units[index];
+
+        this.matrix[coords.x][coords.y].process();
         this.releaseActiveUnit(index);
 
         for(var i=0; i < neighbours.length ; i++) {
@@ -230,7 +237,7 @@ class Propagator {
 
 
     /**
-    * Gets whatever exists in the matreix at the given coordinates.
+    * Gets whatever exists in the matrix at the given coordinates.
     * @param {object} coords - a pair of {x, y} coordinates. 
     */
     get(coords) {
@@ -239,7 +246,7 @@ class Propagator {
 
 
     /**
-    * Gets the neighbouring units of a given unit.
+    * Gets the neighbouring coords of a given unit.
     * @param {object} origin - A set of coordinates like {x: left, y: top} that define the origin.
     * @param {array} pattern - An array of coordinate sets used to calculate the neighbouring units coordinates.
     * @return {array} An array of matrix coordinates.
@@ -293,7 +300,7 @@ class Propagator {
 
         switch(direction) {
             case 'cw':
-                // Do nothing. Patterns are expecetd to be defined clocwise starting
+                // Do nothing. Patterns are expected to be defined clokcwise starting
                 // from top-left.
 
             break;
@@ -319,7 +326,10 @@ class Propagator {
     }
 
 
-
+    /**
+    * Calculates and gets the percent of active units from the total unit count.
+    * @return {float} The percent of units currently active.
+    */
     getActiveUnitsPercent() {
         if( ! this.active_units.length ) {
             return 0;            

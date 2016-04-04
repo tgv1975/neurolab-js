@@ -36,22 +36,29 @@ var PropagatorUnitInspectorView = Backbone.View.extend({
 	* @params {object} coords - A pair of x, y coordinates indicating the unit's spot in the Propagator matrix.
 	*/
 	setUnit: function(unit, coords) {
+
 		this.model = unit;
 		this.unit_coords = coords;
+
+		this.listenTo(this.model, 'afterProcess', this.onUnitProcess)
 
 		this.render();
 	},
 
 
-	render: function() {
+	onUnitProcess: function() {
+		this.render();
+	},
 
+
+	render: function() {
+		
 		var data={};
 
 		if(this.model) {
-
 			data = _.extend(data,
 								{
-									unit: this.unit,
+									unit: this.model,
 									coords: this.unit_coords
 								}
 							);

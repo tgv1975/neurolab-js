@@ -56,10 +56,15 @@ var PropagatorCanvas = CanvasGrid.extend({
 				this.plotByTile(x, y, 'lime');
 			break;
 
-			case 1:
-				this.plotByTile(x, y, 'red');
-			break;
+			// case 1:
+			// 	this.plotByTile(x, y, 'red');
+			// break;
 		}
+
+		if(unit.status >= 1 ) {
+			this.plotByTile(x, y, 'red');
+		}
+
 	},
 
 
