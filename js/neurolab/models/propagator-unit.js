@@ -19,16 +19,31 @@ class PropagatorUnit {
     }
 
 
+    /**
+	* Checks if the unit's lifecycle is finished.
+	* @return {boolean} True if the unit has finished its lifecycle, false otherwise.
+    */
     finished() {
     	return this.status <= 0;
     }
 
 
+    /**
+    * Advance the unit's lifecycle according to its engine.
+    */
     process() {
     	if(this.status > 0) {
     		this.status--;
     	}
     	this.trigger('afterProcess');
+    }
+
+
+    /**
+    * Reset the unit's lifecycle to origin, to restart it.
+    */
+    reset() {
+    	this.status = 5;
     }
 
 

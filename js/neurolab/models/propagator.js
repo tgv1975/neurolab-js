@@ -106,7 +106,12 @@ class Propagator {
         }
 
         this.active_units.push(coords);
-        this.matrix[coords.x][coords.y] = new PropagatorUnit();
+
+        if(!this.matrix[coords.x][coords.y]) {
+            this.matrix[coords.x][coords.y] = new PropagatorUnit();
+        } else {
+            this.matrix[coords.x][coords.y].reset();
+        }
 
         this.trigger('afterUnitSet', coords.x, coords.y, this.matrix[coords.x][coords.y]);
 

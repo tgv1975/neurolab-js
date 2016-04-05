@@ -33,12 +33,12 @@ var PropagatorUnitInspectorView = Backbone.View.extend({
 	/**
 	* Sets this instance's model to the given propagator unit. 
 	* @params {object} unit - A PropagatorUnit object.
-	* @params {object} coords - A pair of x, y coordinates indicating the unit's spot in the Propagator matrix.
+	* @params {object} meta - Meta information about the unit.
 	*/
-	setUnit: function(unit, coords) {
+	setUnit: function(unit, meta) {
 
 		this.model = unit;
-		this.unit_coords = coords;
+		this.meta = meta;
 
 		this.listenTo(this.model, 'afterProcess', this.onUnitProcess)
 
@@ -59,7 +59,7 @@ var PropagatorUnitInspectorView = Backbone.View.extend({
 			data = _.extend(data,
 								{
 									unit: this.model,
-									coords: this.unit_coords
+									meta: JSON.stringify(this.meta)
 								}
 							);
 		} else {

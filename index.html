@@ -116,8 +116,8 @@
     <script id="unit_inspector_template" type="text/x-handlebars-template">
     {{#if this}}
     <ul class="list-unstyled">
-        <li><b>Unit@</b>{{this.coords.x}}/{{this.coords.y}}</li>
-        <li><b>Status:</b>{{this.unit.status}}</li>
+        <li><b>Unit meta: </b>{{this.meta}}</li>
+        <li><b>Status: </b>{{this.unit.status}}</li>
     {{else}}
     Select a unit to inspect.
     {{/if}}
