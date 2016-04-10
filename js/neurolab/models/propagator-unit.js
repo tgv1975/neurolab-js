@@ -13,7 +13,7 @@ class PropagatorUnit {
 
     	this.attachEvents();
 
-        this.status = 5;
+        this.status = 1;
         
         this.engine = new PropagatorUnitEngine();
     }
@@ -43,7 +43,8 @@ class PropagatorUnit {
     * Reset the unit's lifecycle to origin, to restart it.
     */
     reset() {
-    	this.status = 5;
+    	this.status = 1;
+    	this.trigger('reset');
     }
 
 

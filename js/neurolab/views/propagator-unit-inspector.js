@@ -40,14 +40,29 @@ var PropagatorUnitInspectorView = Backbone.View.extend({
 		this.model = unit;
 		this.meta = meta;
 
-		this.listenTo(this.model, 'afterProcess', this.onUnitProcess)
+		this.listenTo(this.model, 'afterProcess', this.onUnitProcess);
+		this.listenTo(this.model, 'reset', this.onUnitProcess)
+
+		this.waiting_time_peak = 0;
 
 		this.render();
 	},
 
 
 	onUnitProcess: function() {
+		this.setLastChangeTimestamp()
 		this.render();
+	},
+
+
+	setLastChangeTimestamp: function() {
+		this.waiting_time = moment.duration(moment().diff(this.last_chage_timestamp)).asMilliseconds();
+
+		if(this.waiting_time > this.waiting_time_peak) {
+			this.waiting_time_peak = this.waiting_time;
+		}
+
+		this.last_chage_timestamp = moment();
 	},
 
 
@@ -62,6 +77,15 @@ var PropagatorUnitInspectorView = Backbone.View.extend({
 									meta: JSON.stringify(this.meta)
 								}
 							);
+			if(this.last_chage_timestamp) {
+				data = _.extend(data,
+								{
+									waiting_time: this.waiting_time,
+									waiting_time_peak: this.waiting_time_peak || this.waiting_time
+
+								}
+							);
+			}
 		} else {
 			data = null;
 		}
