@@ -18,9 +18,9 @@ class PropagatorUnitEngine {
     * @constructor
     * @param {Object} args - Arguments for the constructor.
     * @param {Number} args.initialValue - The value that will be considered initial by the engine.
-    * @param {Object} args.finishValue - A special value that the engine should return
+    * @param {Object} args.finishValue - A special (yet arbitrary) value that the engine should return
     *	when finishing its job. It must be different from all other possible return values
-    *	that constitute parent unit statuses!
+    *	that constitute parent unit statuses, otherwise an infinite cycle may occur!
     */
 	constructor(args) {
 
