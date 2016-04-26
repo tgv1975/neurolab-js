@@ -73,49 +73,49 @@ class NeuronUnitEngine extends PropagatorUnitEngine {
 
 	digest(value) {
 		
-		try {
-			var stage = this.getStageByTime(this.time);
+		var stage = this.getStageByTime(this.time);
 
-			var slope;
-
-			switch(stage){
-				case 'repose':
-					slope = this.preDepolarizationSlope;
-				break;
-
-				case 'pre-depolarization':
-					slope = this.preDepolarizationSlope;
-				break;
-
-				case 'depolarization':
-					slope = this.depolarizationSlope;
-				break;
-
-				case 'critical':
-					slope = this.repolarizationSlope;
-				break;
-
-				case 'repolarization':
-					slope = this.repolarizationSlope;
-				break;
-
-				case 'hyperpolarization-down':
-					slope =  this.hyperpolarizationDownSlope;
-				break;
-
-				case 'hyperpolarization-up':
-					slope = this.hyperpolarizationUpSlope;
-				break;
-			}
-
-			this.time += this.virtualMs;
-			// console.log(this.runFunction(this.time - this.virtualMs, slope));
-			return this.runFunction(this.time - this.virtualMs, slope);
-
-		} catch (err) {
+		if(!stage) {
 			this.time = 0;
 			return this.finishValue;
-		}			
+		}
+
+		var slope;
+
+		switch(stage){
+			case 'repose':
+				slope = this.preDepolarizationSlope;
+			break;
+
+			case 'pre-depolarization':
+				slope = this.preDepolarizationSlope;
+			break;
+
+			case 'depolarization':
+				slope = this.depolarizationSlope;
+			break;
+
+			case 'critical':
+				slope = this.repolarizationSlope;
+			break;
+
+			case 'repolarization':
+				slope = this.repolarizationSlope;
+			break;
+
+			case 'hyperpolarization-down':
+				slope =  this.hyperpolarizationDownSlope;
+			break;
+
+			case 'hyperpolarization-up':
+				slope = this.hyperpolarizationUpSlope;
+			break;
+		}
+
+		this.time += this.virtualMs;
+		// console.log(this.runFunction(this.time - this.virtualMs, slope));
+		return this.runFunction(this.time - this.virtualMs, slope);
+
 	}
 
 
@@ -148,11 +148,7 @@ class NeuronUnitEngine extends PropagatorUnitEngine {
 			return 'hyperpolarization-up';
 		}
 
-		throw { 
-			    name: "NeuronUnitEngine Error", 
-			    message: "Received an invalid time (beyond hyperpolarization)", 
-			    toString: function(){return this.name + ": " + this.message;} 
-			};
+		return null;
 	}
 
 
