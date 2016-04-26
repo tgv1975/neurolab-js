@@ -29,6 +29,7 @@ class PropagatorUnitEngine {
 		this.initialValue = arguments.initialValue || 0;
 		this.finishValue = arguments.finishValue || -1;
 		this.triggerRange = arguments.triggerRange || [1];
+
 	}
 
 
@@ -52,6 +53,7 @@ class PropagatorUnitEngine {
 		} else {
 
 			return this.finishValue;
+
 		}
 
 	}

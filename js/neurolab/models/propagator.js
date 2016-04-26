@@ -235,7 +235,7 @@ class Propagator {
     propagate(index, pattern) {
 
         var coords = this.active_units[index];
-
+        
         if(this.matrix[coords.x][coords.y].isCritical()) {
             var neighbours = this.getNeighbourCoords( coords, pattern );
             
