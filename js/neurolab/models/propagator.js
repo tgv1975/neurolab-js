@@ -197,6 +197,7 @@ class Propagator {
         this.active_unit_index++;
 
         if(this.active_unit_index >= this.active_units.length) {
+
             this.active_unit_index = 0;
             this.cycles++;
 
@@ -206,7 +207,8 @@ class Propagator {
         // As long as there are active units and the processing flag hasn't been set
         // to false, keep going.
         if(this.active_units.length && this.processing) {
-            this.timer = setTimeout( this.step.bind(this) , this.process_delay);
+            var that = this;
+            this.timer = setTimeout( function(){ that.step(); }, this.process_delay);
         } else {
             this.stopProcessing();
         }
@@ -235,7 +237,7 @@ class Propagator {
     propagate(index, pattern) {
 
         var coords = this.active_units[index];
-        
+
         if(this.matrix[coords.x][coords.y].isCritical()) {
             var neighbours = this.getNeighbourCoords( coords, pattern );
             

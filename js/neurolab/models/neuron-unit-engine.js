@@ -30,7 +30,7 @@ class NeuronUnitEngine extends PropagatorUnitEngine {
 		this.hyper = -110;
 
 		 	/* Time flow emulation */
-		this.virtualMs = 1;
+		this.virtualMs = 5;
 		this.time = 0;
 
 			/* Durations [ms] */
@@ -153,7 +153,7 @@ class NeuronUnitEngine extends PropagatorUnitEngine {
 
 
 	/**
-	* Applies a linear function slope formula to a given value.
+	* Applies a linear function slope form to a given value.
 	* @param {Number} value - The input value.
 	* @param {Object} slope - An object containing m and b.
 	*/

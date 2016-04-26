@@ -43,9 +43,10 @@ var PropagatorCanvas = CanvasGrid.extend({
 
 
 	detachProcessEvents: function() {
-		this.stopListening(this.model, "afterUnitSet");
-		this.stopListening(this.model, "afterUnitRelease");
+		// this.stopListening(this.model, "afterUnitSet");
+		// this.stopListening(this.model, "afterUnitRelease");
 		this.stopListening(this.model, "afterReset");
+		this.stopListening(this.model, "afterUnitProcess");
 
 		this.monitoring = false;
 	},
