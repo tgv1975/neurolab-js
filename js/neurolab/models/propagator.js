@@ -22,12 +22,15 @@ class Propagator {
     * @param {int} args.width - Propagator matrix width.
     * @param {int} args.height - Propagator matrix height.
     * @param {int} args.process_delay - Processing delay in milliseconds.
+    * @param {object} args.default_unit_engine - The propagator unit engine to use as default.
     */
     constructor(args) {
 
         this.attachEvents();
 
         this.process_delay = args.process_delay || 0;
+        
+        this.default_unit_engine = args.default_unit_engine;
 
         this.reset(args.width, args.height);
 
@@ -42,7 +45,7 @@ class Propagator {
     reset(width, height) {
 
         if(!width || !height || width <= 0 || height <= 0) {
-            throw { 
+            throw {
                 name: "Propagator Error", 
                 message: sprintf("Trying to instance a propagator with invalid dimensions (%(width)s x %(height)s).", 
                                 {width: width, height: height}),
@@ -91,7 +94,7 @@ class Propagator {
         if(!this.matrix[coords.x][coords.y]) {
             return true;
         }
-        return this.matrix[coords.x][coords.y].finished();
+        return this.matrix[coords.x][coords.y].isIdle();
     }
 
 
@@ -108,9 +111,11 @@ class Propagator {
         this.active_units.push(coords);
 
         if(!this.matrix[coords.x][coords.y]) {
-            this.matrix[coords.x][coords.y] = new PropagatorUnit();
+            this.matrix[coords.x][coords.y] = new PropagatorUnit({"engine": this.default_unit_engine});
+            // this.matrix[coords.x][coords.y].process();
         } else {
             this.matrix[coords.x][coords.y].reset();
+            // this.matrix[coords.x][coords.y].process();
         }
 
         this.trigger('afterUnitSet', coords.x, coords.y, this.matrix[coords.x][coords.y]);
@@ -124,10 +129,9 @@ class Propagator {
     * corresponding matrix unit status accordingly.
     */
     releaseActiveUnit(index) {
-        var coords = {x: this.active_units[index].x, y: this.active_units[index].y}
+        var coords = {x: this.active_units[index].x, y: this.active_units[index].y};
 
-        if(this.matrix[coords.x][coords.y].finished()) {
-
+        if(this.matrix[coords.x][coords.y].isIdle()) {            
             this.active_units.splice(index, 1);
             this.trigger('afterUnitRelease', coords.x, coords.y, this.matrix[coords.x][coords.y]);
 
@@ -226,17 +230,19 @@ class Propagator {
     * @param {array} pattern - An array of coordinate sets used to calculate the neighbouring units coordinates.
     */
     propagate(index, pattern) {
-        
-        var neighbours = this.getNeighbourCoords( this.active_units[index], pattern );
 
         var coords = this.active_units[index];
 
+        if(this.matrix[coords.x][coords.y].isCritical()) {
+            var neighbours = this.getNeighbourCoords( coords, pattern );
+            
+            for(var i=0; i < neighbours.length ; i++) {
+                this.set({x: neighbours[i].x, y: neighbours[i].y});
+            }
+        }
+
         this.matrix[coords.x][coords.y].process();
         this.releaseActiveUnit(index);
-
-        for(var i=0; i < neighbours.length ; i++) {
-            this.set({x: neighbours[i].x, y: neighbours[i].y});
-        }
 
     }
 
@@ -272,7 +278,7 @@ class Propagator {
                 continue;
             }
 
-            result.push({x: x, y: y})
+            result.push({x: x, y: y});
         }
 
         return result;
@@ -299,7 +305,7 @@ class Propagator {
                             {x: 1, y: 1}, 
                             {x: 0, y: 1}, 
                             {x: -1, y: 1}, 
-                            {x: -1, y: 0} ]
+                            {x: -1, y: 0} ];
             break;
         }
 
@@ -349,7 +355,7 @@ class Propagator {
     * @param {int} milliseconds - Milliseconds to delay processing loop by.
     */
     setProcessDelay(milliseconds) {
-        if(milliseconds != this.process_delay) {
+        if(milliseconds !== this.process_delay) {
             this.process_delay = milliseconds;
             this.trigger('change');
         }

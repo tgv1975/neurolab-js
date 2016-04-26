@@ -2,7 +2,7 @@
 * Implements a textual view of a Propagator object.
 */
 
-"use strict;"
+"use strict";
 
 var PropagatorParamsView = Backbone.View.extend({
 
@@ -40,13 +40,13 @@ var PropagatorParamsView = Backbone.View.extend({
 			switch(event.target.id) {
 
 				case 'propagator_width':
-					if(value != this.model.width) {
+					if(value !== this.model.width) {
 						this.model.reset(value, this.model.height);
 					}
 				break;
 
 				case 'propagator_height':
-					if(value != this.model.height) {
+					if(value !== this.model.height) {
 						this.model.reset(this.model.width, value);
 					}
 				break;

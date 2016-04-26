@@ -2,7 +2,7 @@
 * Implements a graphical Propagator view by extending CanvasGrid.
 */
 
-"use strict;"
+"use strict";
 
 var PropagatorCanvas = CanvasGrid.extend({
 
@@ -51,17 +51,13 @@ var PropagatorCanvas = CanvasGrid.extend({
 
 
 	fillUnit: function(x, y, unit) {
-		switch(unit.status){
-			case 0:
-				this.plotByTile(x, y, 'lime');
-			break;
 
-			// case 1:
-			// 	this.plotByTile(x, y, 'red');
-			// break;
-		}
+		if(unit.isIdle()) {
+			
+			this.plotByTile(x, y, 'lime');
 
-		if(unit.status >= 1 ) {
+		} else {
+
 			this.plotByTile(x, y, 'red');
 		}
 

@@ -2,7 +2,7 @@
 * Implements PropagatorMonitorView and PropagatorMonitorControlsView to use with a Propagator object.
 */
 
-"use strict;"
+"use strict";
 
 
 /**
@@ -17,7 +17,7 @@ var PropagatorMonitorView = Backbone.View.extend({
 
 		this.$template_el = $(args.template_el);
 
-		this.template = Handlebars.compile(this.$template_el.html()),
+		this.template = Handlebars.compile(this.$template_el.html());
 
 		this.listenTo(this.model, "change", this.render);
 
@@ -28,9 +28,9 @@ var PropagatorMonitorView = Backbone.View.extend({
 
 
 	attachProcessEvents: function() {
-		this.listenTo(this.model, "processStart", this.onProcessStart)
-		this.listenTo(this.model, "stepComplete", this.onStepComplete)
-		this.listenTo(this.model, "cycleComplete", this.onCycleComplete)
+		this.listenTo(this.model, "processStart", this.onProcessStart);
+		this.listenTo(this.model, "stepComplete", this.onStepComplete);
+		this.listenTo(this.model, "cycleComplete", this.onCycleComplete);
 		this.listenTo(this.model, "afterReset", this.render);
 
 		// this.listenTo(this.model, "afterUnitSet", this.render);
@@ -40,9 +40,9 @@ var PropagatorMonitorView = Backbone.View.extend({
 
 
 	detachProcessEvents: function() {
-		this.stopListening(this.model, "processStart")
-		this.stopListening(this.model, "stepComplete")
-		this.stopListening(this.model, "cycleComplete")
+		this.stopListening(this.model, "processStart");
+		this.stopListening(this.model, "stepComplete");
+		this.stopListening(this.model, "cycleComplete");
 
 		// this.stopListening(this.model, "afterUnitSet", this.render);
 

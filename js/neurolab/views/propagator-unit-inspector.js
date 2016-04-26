@@ -2,7 +2,7 @@
 * Implements a PropagatorUnit inspector view, with the ability to manipulate the unit.
 */
 
-"use strict;"
+"use strict";
 
 
 var PropagatorUnitInspectorView = Backbone.View.extend({
@@ -41,8 +41,9 @@ var PropagatorUnitInspectorView = Backbone.View.extend({
 		this.meta = meta;
 
 		this.listenTo(this.model, 'afterProcess', this.onUnitProcess);
-		this.listenTo(this.model, 'reset', this.onUnitProcess)
+		this.listenTo(this.model, 'reset', this.onUnitProcess);
 
+		this.waiting_time = 0;
 		this.waiting_time_peak = 0;
 
 		this.render();
@@ -50,13 +51,13 @@ var PropagatorUnitInspectorView = Backbone.View.extend({
 
 
 	onUnitProcess: function() {
-		this.setLastChangeTimestamp()
+		this.setLastChangeTimestamp();
 		this.render();
 	},
 
 
 	setLastChangeTimestamp: function() {
-		this.waiting_time = moment.duration(moment().diff(this.last_chage_timestamp)).asMilliseconds();
+		this.waiting_time = moment.duration(moment().diff(this.last_chage_timestamp)).milliseconds();
 
 		if(this.waiting_time > this.waiting_time_peak) {
 			this.waiting_time_peak = this.waiting_time;

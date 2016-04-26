@@ -8,7 +8,7 @@
 * MIT License
 */
 
-"use strict;"
+"use strict";
 
 /**
 * @abstract
@@ -118,7 +118,7 @@ var CanvasGrid = Backbone.View.extend({
 	drawBackground: function() {
 		this.context.beginPath();
 		this.context.fillStyle = this.colors.background;
-		this.context.fillRect(0, 0, this.el.width, this.el.height )
+		this.context.fillRect(0, 0, this.el.width, this.el.height );
 		this.context.closePath();
 	},
 
@@ -166,7 +166,7 @@ var CanvasGrid = Backbone.View.extend({
 	    return {
 			x: event.clientX - rect.left,
 			y: event.clientY - rect.top
-	  	}
+	  	};
     },
 
     
@@ -176,7 +176,7 @@ var CanvasGrid = Backbone.View.extend({
     	return {
     		x: this.coordinateToGrid(coords.x),
     		y: this.coordinateToGrid(coords.y)
-    	}
+    	};
     },
 
 
@@ -186,7 +186,7 @@ var CanvasGrid = Backbone.View.extend({
 		return {
 			x: this.gridCoordToTileIndex(coords.x),
 			y: this.gridCoordToTileIndex(coords.y)
-		}
+		};
 	},   
 
 
@@ -199,7 +199,7 @@ var CanvasGrid = Backbone.View.extend({
     
     gridCoordToTileIndex: function(value) {
 
-    	return Math.trunc(value / this.zoom)
+    	return Math.trunc(value / this.zoom);
 
     },
 
@@ -254,7 +254,7 @@ var CanvasGrid = Backbone.View.extend({
 
 		if( typeof this.lastCursor !== 'undefined') {
 
-			if(coords.x === this.lastCursor.x & coords.y === this.lastCursor.y ) {
+			if(coords.x === this.lastCursor.x && coords.y === this.lastCursor.y ) {
 				return;
 			}
 
