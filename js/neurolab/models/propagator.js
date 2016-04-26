@@ -112,11 +112,14 @@ class Propagator {
 
         if(!this.matrix[coords.x][coords.y]) {
             this.matrix[coords.x][coords.y] = new PropagatorUnit({"engine": this.default_unit_engine});
+            this.listenTo(this.matrix[coords.x][coords.y], 'afterProcess', this.onUnitProcess);
+            _.extend(this.matrix[coords.x][coords.y], {coords});
             // this.matrix[coords.x][coords.y].process();
         } else {
             this.matrix[coords.x][coords.y].reset();
             // this.matrix[coords.x][coords.y].process();
         }
+
 
         this.trigger('afterUnitSet', coords.x, coords.y, this.matrix[coords.x][coords.y]);
 
@@ -409,6 +412,9 @@ class Propagator {
 
     }
 
+    onUnitProcess(unit){
+        this.trigger('afterUnitProcess', unit.coords.x, unit.coords.y, unit);
+    }
 
     /**
     * Couple the backbone.js Events.

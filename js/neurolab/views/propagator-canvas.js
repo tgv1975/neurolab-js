@@ -33,9 +33,10 @@ var PropagatorCanvas = CanvasGrid.extend({
 
 
 	attachProcessEvents: function() {
-		this.listenTo(this.model, "afterUnitSet", this.fillUnit);
-		this.listenTo(this.model, "afterUnitRelease", this.fillUnit);
+		// this.listenTo(this.model, "afterUnitSet", this.fillUnit);
+		// this.listenTo(this.model, "afterUnitRelease", this.fillUnit);
 		this.listenTo(this.model, "afterReset", this.resize);
+		this.listenTo(this.model, "afterUnitProcess", this.fillUnit);
 
 		this.monitoring = true;
 	},
@@ -57,8 +58,11 @@ var PropagatorCanvas = CanvasGrid.extend({
 			this.plotByTile(x, y, 'lime');
 
 		} else {
-
-			this.plotByTile(x, y, 'red');
+			if(unit.status === 0) {
+				this.plotByTile(x, y, 'green');
+			} else {
+				this.plotByTile(x, y, 'red');
+			}
 		}
 
 	},

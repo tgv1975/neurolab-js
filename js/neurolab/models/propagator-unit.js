@@ -50,7 +50,7 @@ class PropagatorUnit {
     */
     process() {
     	this.status = this.engine.digest(this.status);
-    	this.trigger('afterProcess');
+    	this.trigger('afterProcess', this);
     }
 
 
@@ -59,7 +59,8 @@ class PropagatorUnit {
     */
     reset() {
     	this.status = this.engine.initialValue;
-    	this.trigger('reset');
+        this.trigger('afterProcess', this);
+    	this.trigger('reset', this);
     }
 
 
