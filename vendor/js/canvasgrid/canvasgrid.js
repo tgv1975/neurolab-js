@@ -1,8 +1,14 @@
 /**
+* CanvasGrid
+*
 * Implements the logic for a grid/tiled display space on a HTML canvas.
+*
+* Copyright (C) 2016 Tudor Gavan.
+
+* MIT License
 */
 
-"use strict;"
+"use strict";
 
 /**
 * @abstract
@@ -12,6 +18,8 @@ var CanvasGrid = Backbone.View.extend({
 	el: '', // Child class must provide a valid DOM element selector.
 
 	zoom: 1,
+	min_zoom: 1, // This can be increased, but setting it below 1 will be ignored.
+	max_zoom: 100,
 
 	colors: {
 		background: 'lime',
@@ -22,15 +30,16 @@ var CanvasGrid = Backbone.View.extend({
 		'click': 'clickHandler',
 		'mousemove': 'mouseMoveHandler',
 		'mouseout': 'mouseOutHandler',
+		'mousewheel': 'wheelHandler'
 	},
 
 
-	initialize: function( width, height ) {
+	initialize: function(width, height) {
 
 		if(this.constructor === CanvasGrid) {
 			throw { 
 			    name: "CanvasGrid Error", 
-			    message: "Cannot instantiate CanvasGrid directly! You must extend it, and provide the required properties.",
+			    message: "Cannot instantiate CanvasGrid directly! You must extend it and provide the required properties.",
 			    toString: function(){return this.name + ": " + this.message;} 
 			};
     	}
@@ -43,18 +52,26 @@ var CanvasGrid = Backbone.View.extend({
 			};
     	}
 
+    	this.resize(width, height);
+    
+	},
+
+
+	resize: function(width, height) {
+
     	this.width = width;
     	this.height = height;
 
-		this.context = this.el.getContext('2d');
+    	if(!this.cursorCanvas) {
+			this.cursorCanvas = this.createSpriteCanvas(this.width, this.height);
+		}
 
-		this.cursorCanvas = this.createSpriteCanvas(this.width, this.height);
-		this.cursorContext = this.cursorCanvas.getContext('2d');
+    	this.context = this.el.getContext('2d');
+    	this.cursorContext = this.cursorCanvas.getContext('2d');
 
 		this.render();
 
 		this.drawCursor(this.colors.cursor);
-
 	},
 
 
@@ -101,7 +118,7 @@ var CanvasGrid = Backbone.View.extend({
 	drawBackground: function() {
 		this.context.beginPath();
 		this.context.fillStyle = this.colors.background;
-		this.context.fillRect(0, 0, this.el.width, this.el.height )
+		this.context.fillRect(0, 0, this.el.width, this.el.height );
 		this.context.closePath();
 	},
 
@@ -114,6 +131,7 @@ var CanvasGrid = Backbone.View.extend({
 		this.context.closePath();
 	},
 
+
 	plotByTile: function(x, y, color) {
 		x = x * this.zoom;
 		y =y * this.zoom;
@@ -121,6 +139,7 @@ var CanvasGrid = Backbone.View.extend({
 		this.plot(x, y, color);
 	},
 	
+
 	drawCursor: function(color) {
 		this.cursorContext.beginPath();
 		this.cursorContext.lineWidth = 2;
@@ -147,7 +166,7 @@ var CanvasGrid = Backbone.View.extend({
 	    return {
 			x: event.clientX - rect.left,
 			y: event.clientY - rect.top
-	  	}
+	  	};
     },
 
     
@@ -157,7 +176,7 @@ var CanvasGrid = Backbone.View.extend({
     	return {
     		x: this.coordinateToGrid(coords.x),
     		y: this.coordinateToGrid(coords.y)
-    	}
+    	};
     },
 
 
@@ -167,7 +186,7 @@ var CanvasGrid = Backbone.View.extend({
 		return {
 			x: this.gridCoordToTileIndex(coords.x),
 			y: this.gridCoordToTileIndex(coords.y)
-		}
+		};
 	},   
 
 
@@ -180,7 +199,7 @@ var CanvasGrid = Backbone.View.extend({
     
     gridCoordToTileIndex: function(value) {
 
-    	return Math.trunc(value / this.zoom)
+    	return Math.trunc(value / this.zoom);
 
     },
 
@@ -198,6 +217,29 @@ var CanvasGrid = Backbone.View.extend({
     },
 	
 
+    zoomIn: function() {
+    	if(this.zoom + 1 <= this.max_zoom) {
+    		this.zoom++;
+    		this.render();
+    		this.drawCursor(this.colors.cursor);
+    	}
+    },
+
+
+    zoomOut: function() {
+    	if(this.zoom - 1 >= this.min_zoom ) {
+    		this.zoom--;
+
+    		if(this.zoom < 1) {
+    			this.zoom = 1;
+    		}
+
+    		this.render();
+    		this.drawCursor(this.colors.cursor);
+    	}
+    },
+
+
 	clickHandler: function(event) {
 
 		var coords = this.getMousePosToGrid(event);
@@ -212,7 +254,7 @@ var CanvasGrid = Backbone.View.extend({
 
 		if( typeof this.lastCursor !== 'undefined') {
 
-			if(coords.x === this.lastCursor.x & coords.y === this.lastCursor.y ) {
+			if(coords.x === this.lastCursor.x && coords.y === this.lastCursor.y ) {
 				return;
 			}
 
@@ -227,11 +269,24 @@ var CanvasGrid = Backbone.View.extend({
 	},
 
 
-	mouseOutHandler: function(event){
+	mouseOutHandler: function(event) {
 		return event;
+	},
+
+
+	wheelHandler: function(event) {
+		if(event.ctrlKey) {
+			if(event.originalEvent.wheelDelta > 0 ) {
+				this.zoomIn();
+			} else {
+				this.zoomOut();
+			}
+		}
 	}
 
+
 });
+
 
 CanvasGrid.extend = function(child) {
 	var view = Backbone.View.extend.apply(this, arguments);

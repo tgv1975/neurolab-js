@@ -3,26 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <title>Neurolab</title>
-    <link rel="stylesheet" type="text/css" href="css/neurolab.css"/>
+    
     <link rel="stylesheet" type="text/css" href="vendor/framework/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="vendor/js/bootstrap-switch/css/bootstrap-switch.min.css"/>
+    <link rel="stylesheet" type="text/css" href="vendor/css/range-input.css"/>
+    <link rel="stylesheet" type="text/css" href="vendor/font/font-awesome/css/font-awesome.min.css"/>
+
+    <link rel="stylesheet" type="text/css" href="css/neurolab.css"/>
+
     <script>window.$ = window.jQuery = require('./vendor/js/jquery/jquery.js');</script>
+
+    <script type="text/javascript" src="vendor/js/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+
     <script type="text/javascript" src="vendor/js/underscore/underscore.js"></script>
     <script type="text/javascript" src="vendor/js/underscore/underscore.string.js"></script>
+
     <script type="text/javascript" src="vendor/js/sprintf/sprintf.js"></script>
+
     <script type="text/javascript" src="vendor/js/backbone/backbone.js"></script>
+
+    <script type="text/javascript" src="vendor/js/handlebars/handlebars.js"></script>
+    <script type="text/javascript" src="vendor/js/handlebars-helpers/handlebar-helpers-string.js"></script>
+    <script type="text/javascript" src="vendor/js/handlebars-helpers/handlebar-helpers-time.js"></script>
+    
+    <script type="text/javascript" src="vendor/js/moment/moment.min.js"></script>
+
     <script type="text/javascript" src="vendor/js/canvasgrid/canvasgrid.js"></script>
+
+    <script type="text/javascript" src="js/neurolab/models/propagator-unit-engine.js"></script>
+    <script type="text/javascript" src="js/neurolab/models/neuron-unit-engine.js"></script>
+    <script type="text/javascript" src="js/neurolab/models/propagator-unit.js"></script>
+    <script type="text/javascript" src="js/neurolab/models/propagator.js"></script>
     <script type="text/javascript" src="js/neurolab/models/neuron.js"></script>
-    <script type="text/javascript" src="js/neurolab/views/neuron-stats.js"></script>
-    <script type="text/javascript" src="js/neurolab/views/neuron-canvas.js"></script>
+    <script type="text/javascript" src="js/neurolab/views/propagator-controls.js"></script>
+    <script type="text/javascript" src="js/neurolab/views/propagator-params.js"></script>
+    <script type="text/javascript" src="js/neurolab/views/propagator-monitor.js"></script>
+    <script type="text/javascript" src="js/neurolab/views/propagator-canvas.js"></script>
+    <script type="text/javascript" src="js/neurolab/views/propagator-unit-inspector.js"></script>
     <script type="text/javascript" src="js/neurolab/index.js"></script>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div id="neuron_container" class="col-sm-6 col-md-6 col-lg-6">
-                <canvas id="neuron_canvas" class="canvas-grid"></canvas>    
+    <!-- Handlebar Templates -->
+    <script id="neuron_canvas_controls_template" type="text/x-handlebars-template">
+        <input id="canvas_switch" type="checkbox"{{#if monitoring}} checked{{/if}}/>
+    </script>
+
+    <script id="neuron_params_template" type="text/x-handlebars-template">
+        <div class="form-horizontal">
+            <div class="form-group form-group-sm">
+                <label for="propagator_width" class="control-label col-xs-2">Width:</label>
+                <div class="col-xs-10">
+                    <input id="propagator_width" name="propagator_width" value="{{this.width}}" type="number" class="form-control">
+                </div>
             </div>
-            <div id="neuron_stats" class="col-sm-6 col-md-6 col-lg-6">
+            <div class="form-group form-group-sm">
+                <label for="propagator_height" class="control-label col-xs-2">Height:</label>
+                <div class="col-xs-10">
+                    <input id="propagator_height" name="propagator_height" value="{{this.height}}" type="number" class="form-control">
+                </div>
+            </div>
+            <div class="form-group form-group-sm col-xs-12">
+                <label class="control-label text-muted">Unit count: {{this.unit_count}}</label>
+            </div>
+            <div class="form-group form-group-sm">
+                <label for="propagator_process_delay" class="control-label col-xs-2">Delay:</label>
+                <div class="col-xs-10">
+                    <input id="propagator_process_delay" name="propagator_process_delay" value="{{this.process_delay}}" type="number" class="form-control">
+                </div>
+            </div>            
+        </div>
+    </script>
+
+    <script id="neuron_monitor_template" type="text/x-handlebars-template">
+        <ul class="list-unstyled">
+            {{#each this}}
+            <li><b>{{ucFirst (deSlugify @key)}}:</b> {{this}}</li>
+            {{/each}}
+        </ul>        
+    </script>
+
+    <script id="neuron_monitor_controls_template" type="text/x-handlebars-template">
+        <input id="monitor_switch" type="checkbox"{{#if monitoring}} checked{{/if}}/>
+    </script>
+
+    <script id="neuron_controls_template" type="text/x-handlebars-template">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+
+                <div class="collapse navbar-collapse" id="main-navbar">
+                    <ul class="nav navbar-nav">
+                        <li>
+                        {{#if processing}}
+                            <a href="#" id="propagator_pause_btn"><i class="fa fa-pause"></i></a>
+                        {{else}}
+                            <a  href="#" id="propagator_play_btn"><i class="fa fa-play"></i></a>
+                        {{/if}}
+                        </li>
+                        <li><a href="#" id="propagator_reset_btn"><i class="fa fa-stop"></i></a></li>
+                    </ul>                
+                </div>
+            </div>
+        </nav>
+    </script>
+
+    <script id="unit_inspector_template" type="text/x-handlebars-template">
+    {{#if this}}
+    <ul class="list-unstyled">
+        <li><b>Unit meta: </b>{{this.meta}}</li>
+        <li><b>Status: </b>{{this.unit.status}}</li>
+        <li><b>Waiting time: </b>{{this.waiting_time}} ms (max. {{this.waiting_time_peak}} ms)</li>
+    {{else}}
+    Select a unit to inspect.
+    {{/if}}
+    </script>
+    <!-- End Handlebar Templates -->
+
+    <div class="container-fluid">
+        
+        <div class="col-lg-12">
+            <div id="neuron_controls"></div>
+        </div>
+
+        <div class="row">
+
+            <div id="neuron_container" class="col-sm-6 col-md-8 col-lg-8">
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <i class="fa fa-map-o"></i>
+                                Neuron map
+                                <div id="neuron_canvas_controls" class="pull-right">                                
+                                </div>
+                            </h3>
+                        </div>
+                        <div class="panel-body">            
+                            <canvas id="neuron_canvas" class="canvas-grid"></canvas>    
+                        </div>
+                        <div class="panel-footer"></div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <i class="fa fa-search"></i>
+                                Unit inspector
+                            </h3>
+                        </div>
+                        <div id="unit_inspector"class="panel-body">
+                        </div>
+                        <div class="panel-footer">
+                        </div>
+                    </div>
+                </div>                 
+            </div>
+
+            <div class="col-sm-6 col-md-4 col-lg-4">
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-cog"></i> Neuron parameters</h3>
+                        </div>
+                        <div id="neuron_params" class="panel-body">                            
+                        </div>
+                        <div class="panel-footer">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <i class="fa fa-bar-chart-o"></i>
+                                Realtime stats
+                                <div id="neuron_monitor_controls" class="pull-right">
+                                </div>
+                            </h3>
+                        </div>
+                        <div id="neuron_monitor"class="panel-body">
+                        </div>
+                        <div class="panel-footer">
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

@@ -1,8 +1,10 @@
-#neuron_container {
-	border: 1px inset silver;
-	max-height: 50vh;
+body {
+	padding-top:10px;
+}
+
+#neuron_container .panel-body{
+	max-height: 80vh;
 	overflow: auto;
-	padding: 0;
 }
 
 .canvas-grid {
@@ -10,3 +12,7 @@
 	padding: 0;
 	cursor: pointer;
 }
+
+/*div [class*='col-']{
+	border: 1px solid red;
+}*/
