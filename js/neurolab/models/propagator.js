@@ -114,10 +114,8 @@ class Propagator {
             this.matrix[coords.x][coords.y] = new PropagatorUnit({"engine": this.default_unit_engine});
             this.listenTo(this.matrix[coords.x][coords.y], 'afterProcess', this.onUnitProcess);
             _.extend(this.matrix[coords.x][coords.y], {coords});
-            // this.matrix[coords.x][coords.y].process();
         } else {
             this.matrix[coords.x][coords.y].reset();
-            // this.matrix[coords.x][coords.y].process();
         }
 
 
@@ -156,6 +154,7 @@ class Propagator {
         this.pattern = this.generatePropagationPatternArray('o', 'cw');
 
         this.active_unit_index = 0;
+        this.active_unit_count = 0;
         this.steps = 0;
         this.cycles = 0;
 
@@ -414,9 +413,15 @@ class Propagator {
 
     }
 
+
+    /**
+    * Executes when a unit afterProcess event is captured.
+    * @param {PropagatorUnit} unit - A PropagatorUnit object.
+    */
     onUnitProcess(unit){
         this.trigger('afterUnitProcess', unit.coords.x, unit.coords.y, unit);
     }
+
 
     /**
     * Couple the backbone.js Events.
